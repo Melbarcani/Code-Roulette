@@ -8,6 +8,12 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import fr.esgi.projetannuel.model.User;
+import fr.esgi.projetannuel.repository.UserRepository;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -25,6 +31,9 @@ public class UserService {
 
     public User findById(String id) {
         return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("user", id));
+    }
+    public Optional<User> findById(Integer id) {
+        return repository.findById(id);
     }
 
     public User create(User user) {
