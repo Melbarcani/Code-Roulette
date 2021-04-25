@@ -36,6 +36,7 @@
         </dependency>
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
@@ -46,6 +47,12 @@
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>-->
 >>>>>>> add User Controller, Service and Model :sparkles:
+=======
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+>>>>>>> add auth & resource not found exception
 
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -65,14 +72,20 @@
         </dependency>
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> add auth & resource not found exception
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt</artifactId>
             <version>0.9.1</version>
         </dependency>
 
+<<<<<<< HEAD
 =======
 >>>>>>> add User Controller, Service and Model :sparkles:
+=======
+>>>>>>> add auth & resource not found exception
     </dependencies>
 
     <build>
