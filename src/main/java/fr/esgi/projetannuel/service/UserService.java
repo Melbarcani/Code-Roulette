@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+
 import fr.esgi.projetannuel.model.User;
 import fr.esgi.projetannuel.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,9 +32,6 @@ public class UserService {
         return repository.findAll();
     }
 
-    public User findById(String id) {
-        return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("user", id));
-    }
     public Optional<User> findById(Integer id) {
         return repository.findById(id);
     }
@@ -43,7 +41,7 @@ public class UserService {
     }
 
     @Transactional
-    public void deleteById(String id){
+    public void deleteById(String id) {
         repository.deleteById(id);
     }
 }
