@@ -15,7 +15,6 @@ public class UserController {
 
     private final UserService userService;
 
-    @Autowired
     public UserController(UserService userService) {
         this.userService = userService;
     }
@@ -25,9 +24,20 @@ public class UserController {
         return new ResponseEntity<>(userService.findAll(), HttpStatus.OK);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<User> findById(@PathVariable String id){
+        return new ResponseEntity<>(userService.findById(id), HttpStatus.OK);
+    }
+
     @PostMapping("/create")
     public ResponseEntity<User> save(@RequestBody User user){
         userService.create(user);
         return new ResponseEntity<>(userService.create(user), HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete(@PathVariable String id) {
+        userService.deleteById(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
