@@ -23,10 +23,10 @@ public class User {
     @Column(nullable = false)
     private String lastName;
 
-    @Column(nullable = false)
+    @Column(unique = true, nullable = false)
     private String email;
 
-    @Column(nullable = false)
+    @Column(unique = true, nullable = false)
     private String userName;
 
     @Column(nullable = false)

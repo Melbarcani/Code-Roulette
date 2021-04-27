@@ -56,7 +56,8 @@ public class AuthService {
     public URI registerUser(User user){
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-        String id = userRepository.save(user).getId();
+        User userSaved = userRepository.save(user);
+        String id = userSaved.getId();
         return ServletUriComponentsBuilder.fromPath("/api/users").path("/{id}").buildAndExpand(id).toUri();
     }
 
