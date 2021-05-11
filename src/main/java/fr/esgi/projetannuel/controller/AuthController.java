@@ -27,14 +27,14 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody Login login) {
-        HttpHeaders httpHeaders = authService.createSession(login);
+    public ResponseEntity<HttpHeaders> login(@RequestBody Login login) {
+        var httpHeaders = authService.createSession(login);
         return new ResponseEntity<>(httpHeaders, HttpStatus.CREATED);
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> signup(@RequestBody User user) {
-        URI uri = authService.registerUser(user);
+    public ResponseEntity<URI> signup(@RequestBody User user) {
+        var uri = authService.registerUser(user);
         return ResponseEntity.created(uri).build();
     }
 }
