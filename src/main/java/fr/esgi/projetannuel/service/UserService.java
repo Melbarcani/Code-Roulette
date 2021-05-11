@@ -3,30 +3,17 @@ package fr.esgi.projetannuel.service;
 import fr.esgi.projetannuel.exception.ResourceNotFoundException;
 import fr.esgi.projetannuel.model.User;
 import fr.esgi.projetannuel.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
-
-import fr.esgi.projetannuel.model.User;
-import fr.esgi.projetannuel.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import javax.transaction.Transactional;
-import java.util.List;
-import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class UserService {
 
     private final UserRepository repository;
-
-    @Autowired
-    public UserService(UserRepository repository) {
-        this.repository = repository;
-    }
 
     public List<User> findAll() {
         return repository.findAll();
