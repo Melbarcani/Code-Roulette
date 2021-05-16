@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.Duration;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.stream.Collectors;
@@ -18,7 +19,7 @@ import java.util.stream.Collectors;
 @Component
 public class TokenProvider {
     private static final String AUTHORITIES_KEY = "auth";
-    private final long tokenValidity = Duration.ofHours(72).getSeconds();
+    private final int tokenValidityDays = 7;
     private final byte[] secret;
 
     public TokenProvider(@Value("${security.token.secret}") CharSequence secret) {
@@ -31,14 +32,15 @@ public class TokenProvider {
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
 
-        long now = (new Date()).getTime();
-        Date validity = new Date(now + this.tokenValidity);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.add(Calendar.DATE, tokenValidityDays);
 
         return Jwts.builder()
                 .setSubject(authentication.getName())
                 .claim(AUTHORITIES_KEY, authorities)
                 .signWith(SignatureAlgorithm.HS512, secret)
-                .setExpiration(validity)
+                .setExpiration(calendar.getTime())
                 .compact();
     }
 
