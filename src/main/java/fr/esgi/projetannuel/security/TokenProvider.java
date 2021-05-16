@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 @Component
 public class TokenProvider {
     private static final String AUTHORITIES_KEY = "auth";
-    private final int tokenValidityDays = 7;
     private final byte[] secret;
 
     public TokenProvider(@Value("${security.token.secret}") CharSequence secret) {
@@ -27,6 +26,8 @@ public class TokenProvider {
     }
 
     public String createToken(Authentication authentication) {
+        int tokenValidityDays = 7;
+
         String authorities = authentication.getAuthorities()
                 .stream()
                 .map(GrantedAuthority::getAuthority)
