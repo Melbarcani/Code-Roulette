@@ -2,7 +2,6 @@ package fr.esgi.projetannuel.controller;
 
 import fr.esgi.projetannuel.model.User;
 import fr.esgi.projetannuel.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

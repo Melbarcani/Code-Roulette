@@ -17,6 +17,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Service
 public class AuthService {
@@ -46,7 +48,7 @@ public class AuthService {
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         String token = tokenProvider.createToken(authentication);
 
-        sessionRepository.save(new Session(user.getId(), null, token, user));
+        sessionRepository.save(new Session(user.getId(), LocalDateTime.now(), token, user));
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(HttpHeaders.AUTHORIZATION, "Bearer " + token);
