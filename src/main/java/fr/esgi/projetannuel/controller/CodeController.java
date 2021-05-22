@@ -31,7 +31,6 @@ public class CodeController {
 
     @PostMapping("/create")
     public ResponseEntity<Code> save(@RequestBody String input){
-        codeService.create(input);
         return new ResponseEntity<>(codeService.create(input), HttpStatus.CREATED);
     }
 
@@ -48,8 +47,6 @@ public class CodeController {
         if(responseEntity.getStatusCode().equals(HttpStatus.OK)){
             status = Status.SUCCESS;
         }
-
-        codeService.createWithOutput(input, output, status);
 
         return new ResponseEntity<>(codeService.createWithOutput(input, output, status), HttpStatus.CREATED);
     }
@@ -70,7 +67,6 @@ public class CodeController {
             status = Status.SUCCESS;
         }
 
-        codeService.updateOutput(code, output, status);
         return new ResponseEntity<>(codeService.updateOutput(code, output, status), HttpStatus.OK);
     }
 
