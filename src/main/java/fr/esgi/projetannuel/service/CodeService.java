@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -37,6 +38,7 @@ public class CodeService {
     public Code updateOutput(Code code, String output, Status status) {
         code.setStatus(status);
         code.setOutput(output);
+        code.setCompiledAt(LocalDateTime.now());
 
         return repository.save(code);
     }

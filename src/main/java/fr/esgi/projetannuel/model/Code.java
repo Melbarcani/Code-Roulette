@@ -33,6 +33,9 @@ public class Code {
     @Column(nullable = true)
     private LocalDateTime updatedAt;
 
+    @Column(nullable = true)
+    private LocalDateTime compiledAt;
+
     public Code() {}
 
     public Code(String input) {
@@ -46,6 +49,7 @@ public class Code {
         this.status = status;
 
         this.createdAt = LocalDateTime.now();
+        this.compiledAt = LocalDateTime.now();
     }
 
     public String getId() {
@@ -94,5 +98,13 @@ public class Code {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public LocalDateTime getCompiledAt() {
+        return compiledAt;
+    }
+
+    public void setCompiledAt(LocalDateTime compiledAt) {
+        this.compiledAt = compiledAt;
     }
 }
