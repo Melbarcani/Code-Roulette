@@ -36,7 +36,9 @@ public class Code {
     @Column(nullable = true)
     private LocalDateTime compiledAt;
 
-    public Code() {}
+    public Code() {
+        this.createdAt = LocalDateTime.now();
+    }
 
     public Code(String input) {
         this.input = input;
