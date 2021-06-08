@@ -17,10 +17,10 @@ public class Code {
     @Column(updatable = false, nullable = false)
     private String id;
 
-    @Column(nullable = false)
+    @Column(columnDefinition="text", nullable = false)
     private String input;
 
-    @Column(nullable = true)
+    @Column(columnDefinition="text", nullable = true)
     private String output;
 
     @Column(nullable = true)
