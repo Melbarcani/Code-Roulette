@@ -23,6 +23,10 @@ public class Code {
     @Column(columnDefinition="text", nullable = true)
     private String output;
 
+/*    @OneToOne
+    @JoinColumn(nullable = true)
+    private User user;*/
+
     @Column(nullable = true)
     @Enumerated(EnumType.STRING)
     private Status status = Status.UNCOMPILED;
