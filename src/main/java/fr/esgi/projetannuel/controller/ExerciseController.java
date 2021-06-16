@@ -25,7 +25,7 @@ public class ExerciseController
 
     @GetMapping("/{id}")
     public ResponseEntity<Exercise> findById(@PathVariable String id){
-        return new ResponseEntity<>(exerciseService.findById(id), HttpStatus.OK);
+        return new ResponseEntity<>(exerciseService.getExerciseToDisplay(id), HttpStatus.OK);
     }
 
     @PostMapping("/")

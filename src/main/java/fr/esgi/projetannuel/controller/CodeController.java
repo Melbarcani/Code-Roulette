@@ -2,6 +2,7 @@ package fr.esgi.projetannuel.controller;
 
 import fr.esgi.projetannuel.enumeration.Status;
 import fr.esgi.projetannuel.model.Code;
+import fr.esgi.projetannuel.model.Exercise;
 import fr.esgi.projetannuel.service.CodeService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,9 +35,16 @@ public class CodeController {
         return new ResponseEntity<>(codeService.create(input), HttpStatus.CREATED);
     }
 
+   /* @PostMapping()
+    public ResponseEntity<Code> compileAndSave(@RequestBody Exercise exercise){
+        String uri = "http://localhost:9099/api/compiler/java";
+        RestTemplate restTemplate = new RestTemplate();
+        String userCode = codeService.buildCodeToCompile(exercise);
+    }*/
+
     @PostMapping("/compile")
     public ResponseEntity<Code> saveCompile(@RequestBody String input){
-        String uri = "http://localhost:8099/api/compiler/java";
+        String uri = "http://localhost:9099/api/compiler/jav";
         RestTemplate restTemplate = new RestTemplate();
 
         ResponseEntity<String> responseEntity = restTemplate.postForEntity(uri, input, String.class);
@@ -55,7 +63,7 @@ public class CodeController {
     public ResponseEntity<Code> compileById(@PathVariable String id){
         Code code = codeService.findById(id);
 
-        String uri = "http://localhost:8099/api/compiler/java";
+        String uri = "http://localhost:9099/api/compiler/java";
         RestTemplate restTemplate = new RestTemplate();
 
         ResponseEntity<String> responseEntity = restTemplate.postForEntity(uri, code.getInput(), String.class);

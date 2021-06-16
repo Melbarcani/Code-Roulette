@@ -3,6 +3,7 @@ package fr.esgi.projetannuel.service;
 import fr.esgi.projetannuel.enumeration.Status;
 import fr.esgi.projetannuel.exception.ResourceNotFoundException;
 import fr.esgi.projetannuel.model.Code;
+import fr.esgi.projetannuel.model.Exercise;
 import fr.esgi.projetannuel.repository.CodeRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ import java.util.List;
 public class CodeService {
 
     private final CodeRepository repository;
+    private final CodeAdapterService codeAdapterService;
 
     public List<Code> findAll() {
         return repository.findAll();
@@ -24,6 +26,7 @@ public class CodeService {
     public Code findById(String id) {
         return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("code", id));
     }
+    //mergeExoWithMain() and Compile()
 
     public Code create(String input) {
         Code code = new Code(input);
@@ -47,4 +50,9 @@ public class CodeService {
     public void deleteById(String id) {
         repository.deleteById(id);
     }
+
+    /*public String buildCodeToCompile(Exercise exercise) {
+        var codeAdapter = codeAdapterService.create(exercise.getLanguage());
+        String entireUserCode = codeAdapter.mergeCode(exercise);
+    }*/
 }
