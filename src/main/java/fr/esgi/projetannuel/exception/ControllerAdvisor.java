@@ -16,6 +16,7 @@ import java.util.Map;
 @Slf4j
 @ControllerAdvice
 public class ControllerAdvisor extends ResponseEntityExceptionHandler {
+
     @ExceptionHandler(ApiBaseException.class)
     protected ResponseEntity<?> handleResourceNotFound(ResourceNotFoundException exception, WebRequest request){
         return handleExceptionInternal(exception, exception.getErrors(), new HttpHeaders(), exception.getStatusCode(), request);

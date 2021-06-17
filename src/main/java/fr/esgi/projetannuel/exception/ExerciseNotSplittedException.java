@@ -3,7 +3,6 @@ package fr.esgi.projetannuel.exception;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 
-import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
@@ -19,6 +18,7 @@ public class ExerciseNotSplittedException extends ApiBaseException{
         return HttpStatus.NO_CONTENT;
     }
 
+    @Override
     public Map<String, Object> getErrors(){
         return errors;
     }

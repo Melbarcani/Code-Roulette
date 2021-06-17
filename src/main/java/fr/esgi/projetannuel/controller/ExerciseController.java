@@ -2,6 +2,7 @@ package fr.esgi.projetannuel.controller;
 
 import fr.esgi.projetannuel.model.Exercise;
 import fr.esgi.projetannuel.service.ExerciseService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,13 +11,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/exercise")
+@RequiredArgsConstructor
 public class ExerciseController
 {
     private final ExerciseService exerciseService;
-
-    public ExerciseController(ExerciseService exerciseService) {
-        this.exerciseService = exerciseService;
-    }
 
     @GetMapping
     public ResponseEntity<List<Exercise>> findAll(){

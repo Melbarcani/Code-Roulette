@@ -9,7 +9,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
-import java.time.Duration;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
@@ -26,14 +25,14 @@ public class TokenProvider {
     }
 
     public String createToken(Authentication authentication) {
-        int tokenValidityDays = 7;
+        var tokenValidityDays = 7;
 
         String authorities = authentication.getAuthorities()
                 .stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
 
-        Calendar calendar = Calendar.getInstance();
+        var calendar = Calendar.getInstance();
         calendar.setTime(new Date());
         calendar.add(Calendar.DATE, tokenValidityDays);
 
@@ -46,14 +45,14 @@ public class TokenProvider {
     }
 
     public Authentication getAuthentication(String token) {
-        Claims claims = parseToken(token).getBody();
+        var claims = parseToken(token).getBody();
         Collection<? extends GrantedAuthority> authorities = Arrays.stream(claims.get(AUTHORITIES_KEY)
                 .toString()
                 .split(","))
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
 
-        User user = new User(claims.getSubject(), "", authorities);
+        var user = new User(claims.getSubject(), "", authorities);
 
         return new UsernamePasswordAuthenticationToken(user, token, authorities);
     }

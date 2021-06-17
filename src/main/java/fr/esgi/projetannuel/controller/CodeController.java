@@ -2,8 +2,13 @@ package fr.esgi.projetannuel.controller;
 
 import fr.esgi.projetannuel.enumeration.Status;
 import fr.esgi.projetannuel.model.Code;
+import fr.esgi.projetannuel.model.CodeResult;
+import fr.esgi.projetannuel.model.Constants;
 import fr.esgi.projetannuel.model.Exercise;
 import fr.esgi.projetannuel.service.CodeService;
+import fr.esgi.projetannuel.service.ExerciseService;
+import fr.esgi.projetannuel.service.RestService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,12 +18,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/code")
+@RequiredArgsConstructor
 public class CodeController {
     private final CodeService codeService;
-
-    public CodeController(CodeService codeService) {
-        this.codeService = codeService;
-    }
+    private final RestService restService;
+    private final ExerciseService exerciseService;
 
     @GetMapping
     public ResponseEntity<List<Code>> findAll(){
@@ -35,19 +39,26 @@ public class CodeController {
         return new ResponseEntity<>(codeService.create(input), HttpStatus.CREATED);
     }
 
-   /* @PostMapping()
-    public ResponseEntity<Code> compileAndSave(@RequestBody Exercise exercise){
-        String uri = "http://localhost:9099/api/compiler/java";
-        RestTemplate restTemplate = new RestTemplate();
-        String userCode = codeService.buildCodeToCompile(exercise);
-    }*/
+    @PostMapping("/compileAndSave")
+    public ResponseEntity<CodeResult> compileAndSave(@RequestBody String userCode){ // Should be exercise in the bodyRequest
+        /** Bootstrap to test code **/
+        var userExercise = exerciseService.getExercise("c43ef6bc-4727-46f7-a616-ded75c70dedc");
+        /****************************/
+
+        String entireUserCode = codeService.buildCodeToCompile(userExercise);
+        String compilationResult = restService.postCode(entireUserCode, userExercise.getLanguage());
+        var codeResult = new CodeResult(compilationResult, Status.SUCCESS);
+        System.out.println(compilationResult);
+        return new ResponseEntity<>(codeResult, HttpStatus.OK);
+    }
 
     @PostMapping("/compile")
-    public ResponseEntity<Code> saveCompile(@RequestBody String input){
-        String uri = "http://localhost:9099/api/compiler/jav";
-        RestTemplate restTemplate = new RestTemplate();
+    public ResponseEntity<Code> saveCompiledCode(@RequestBody String input){
+        var restTemplate = new RestTemplate();
 
-        ResponseEntity<String> responseEntity = restTemplate.postForEntity(uri, input, String.class);
+        ResponseEntity<String> responseEntity = restTemplate.postForEntity(Constants.COMPILER_URL, input, String.class);
+
+        //restService.someRestCall(input);
 
         String output = responseEntity.getBody();
         Status status = Status.ERROR;
