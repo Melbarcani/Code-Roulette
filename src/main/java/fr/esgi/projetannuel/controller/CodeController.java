@@ -4,7 +4,6 @@ import fr.esgi.projetannuel.enumeration.Status;
 import fr.esgi.projetannuel.model.Code;
 import fr.esgi.projetannuel.model.CodeResult;
 import fr.esgi.projetannuel.model.Constants;
-import fr.esgi.projetannuel.model.Exercise;
 import fr.esgi.projetannuel.service.CodeService;
 import fr.esgi.projetannuel.service.ExerciseService;
 import fr.esgi.projetannuel.service.RestService;
@@ -46,17 +45,16 @@ public class CodeController {
         /****************************/
 
         String entireUserCode = codeService.buildCodeToCompile(userExercise);
-        String compilationResult = restService.postCode(entireUserCode, userExercise.getLanguage());
-        var codeResult = new CodeResult(compilationResult, Status.SUCCESS);
+        var compilationResult = restService.postCode(entireUserCode, userExercise.getLanguage());
         System.out.println(compilationResult);
-        return new ResponseEntity<>(codeResult, HttpStatus.OK);
+        return new ResponseEntity<>(compilationResult, HttpStatus.OK);
     }
 
     @PostMapping("/compile")
     public ResponseEntity<Code> saveCompiledCode(@RequestBody String input){
         var restTemplate = new RestTemplate();
 
-        ResponseEntity<String> responseEntity = restTemplate.postForEntity(Constants.COMPILER_URL, input, String.class);
+        ResponseEntity<String> responseEntity = restTemplate.postForEntity(Constants.COMPILER_BASE_URL, input, String.class);
 
         //restService.someRestCall(input);
 
