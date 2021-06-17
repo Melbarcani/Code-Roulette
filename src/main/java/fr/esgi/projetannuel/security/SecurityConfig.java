@@ -16,6 +16,13 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 @EnableWebMvc
 public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebMvcConfigurer {
+
+    private static final String[] USER_ENDPOINTS = {
+            "/api/users/**",
+            "/api/session/**",
+            "/api/code/**",
+            "/api/exercise/**"
+    };
     private final TokenProvider tokenProvider;
 
     SecurityConfig(TokenProvider tokenProvider){
@@ -34,10 +41,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/api/auth/**").permitAll()
-                .antMatchers("/api/users/**").hasRole(Role.USER.toString())
-                .antMatchers("/api/session/**").hasRole(Role.USER.toString())
-                .antMatchers("/api/code/**").hasRole(Role.USER.toString())
-                .antMatchers("/api/exercise/**").hasRole(Role.USER.toString())
+                .antMatchers("/api/exercise/compile").permitAll()
+                .antMatchers(USER_ENDPOINTS).hasRole(Role.USER.toString())
                 .anyRequest().authenticated()
                 
                 .and()

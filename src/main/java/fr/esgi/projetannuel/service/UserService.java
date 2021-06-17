@@ -1,6 +1,7 @@
 package fr.esgi.projetannuel.service;
 
 import fr.esgi.projetannuel.exception.ResourceNotFoundException;
+import fr.esgi.projetannuel.model.Constants;
 import fr.esgi.projetannuel.model.User;
 import fr.esgi.projetannuel.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -20,7 +21,7 @@ public class UserService {
     }
 
     public User findById(String id) {
-        return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("user", id));
+        return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(Constants.USER, id));
     }
 
     public User create(User user) {
