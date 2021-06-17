@@ -45,6 +45,15 @@ public class Exercise {
         this.createdAt = LocalDateTime.now();
     }
 
+    public Exercise(String id, String title, String code, Language language) {
+        this.id = id;
+        this.title = title;
+        this.code = code;
+        this.language = language;
+
+        this.createdAt = LocalDateTime.now();
+    }
+
     public String getId() {
         return id;
     }

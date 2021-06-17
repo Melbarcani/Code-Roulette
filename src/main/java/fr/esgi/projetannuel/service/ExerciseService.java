@@ -33,7 +33,7 @@ public class ExerciseService {
         if(codeToDisplay == null || codeToDisplay.isBlank()){
             throw new ExerciseNotSplittedException(Constants.EXERCISE, id);
         }
-        return new Exercise(exercise.getTitle(), codeToDisplay, exercise.getLanguage());
+        return new Exercise(id, exercise.getTitle(), codeToDisplay, exercise.getLanguage());
     }
 
     public Exercise create(Exercise exercise) {

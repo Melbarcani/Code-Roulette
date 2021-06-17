@@ -4,6 +4,7 @@ import fr.esgi.projetannuel.enumeration.Status;
 import fr.esgi.projetannuel.model.Code;
 import fr.esgi.projetannuel.model.CodeResult;
 import fr.esgi.projetannuel.model.Constants;
+import fr.esgi.projetannuel.model.Exercise;
 import fr.esgi.projetannuel.service.CodeService;
 import fr.esgi.projetannuel.service.ExerciseService;
 import fr.esgi.projetannuel.service.RestService;
@@ -39,9 +40,9 @@ public class CodeController {
     }
 
     @PostMapping("/compileAndSave")
-    public ResponseEntity<CodeResult> compileAndSave(@RequestBody String userCode){ // Should be exercise in the bodyRequest
+    public ResponseEntity<CodeResult> compileAndSave(@RequestBody Exercise exercise){ // Should be exercise in the bodyRequest
         /** Bootstrap to test code **/
-        var userExercise = exerciseService.getExercise("c43ef6bc-4727-46f7-a616-ded75c70dedc");
+        var userExercise = exercise;
         /****************************/
 
         String entireUserCode = codeService.buildCodeToCompile(userExercise);
@@ -72,7 +73,7 @@ public class CodeController {
     public ResponseEntity<Code> compileById(@PathVariable String id){
         Code code = codeService.findById(id);
 
-        String uri = "http://localhost:9099/api/compiler/java";
+        String uri = Constants.COMPILER_BASE_URL;
         RestTemplate restTemplate = new RestTemplate();
 
         ResponseEntity<String> responseEntity = restTemplate.postForEntity(uri, code.getInput(), String.class);
