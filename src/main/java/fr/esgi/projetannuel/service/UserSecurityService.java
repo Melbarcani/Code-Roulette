@@ -1,6 +1,5 @@
 package fr.esgi.projetannuel.service;
 
-import fr.esgi.projetannuel.model.User;
 import fr.esgi.projetannuel.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationServiceException;
