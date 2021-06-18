@@ -41,9 +41,7 @@ public class CodeController {
 
     @PostMapping("/compileAndSave")
     public ResponseEntity<CodeResult> compileAndSave(@RequestBody Exercise exercise){ // Should be exercise in the bodyRequest
-        /** Bootstrap to test code **/
         var userExercise = exercise;
-        /****************************/
 
         String entireUserCode = codeService.buildCodeToCompile(userExercise);
         var compilationResult = restService.postCode(entireUserCode, userExercise.getLanguage());

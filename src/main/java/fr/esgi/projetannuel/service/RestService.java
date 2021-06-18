@@ -1,8 +1,10 @@
 package fr.esgi.projetannuel.service;
 
 import fr.esgi.projetannuel.enumeration.Language;
+
 import fr.esgi.projetannuel.model.CodeResult;
 import fr.esgi.projetannuel.model.Constants;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;

@@ -1,5 +1,6 @@
 package fr.esgi.projetannuel.service.compiler;
 
+import fr.esgi.projetannuel.exception.ExerciseNotSplittedException;
 import fr.esgi.projetannuel.exception.ResourceNotFoundException;
 import fr.esgi.projetannuel.model.Exercise;
 import lombok.RequiredArgsConstructor;
@@ -24,15 +25,14 @@ public class JavaAdapterService implements ICompilerService {
     public String mergeCode(Exercise userExercise, Exercise mainExercise) {
         String userCode = userExercise.getCode();
         String mainCode = mainExercise.getCode();
-        var userParts = new String[0];
+
         var mainParts = new String[0];
         if (userCode != null && mainCode != null) {
-            userParts = userCode.split(SPLITTER);
             mainParts = mainCode.split(SPLITTER);
         }
-        if(userParts.length > 1 && mainParts.length > 1){
-            return mainParts[0] + userParts[1] + mainParts[2];
+        if(mainParts.length > 1){
+            return mainParts[0] + userCode + mainParts[2];
         }
-        throw new ResourceNotFoundException("exo", userExercise.getId());
+        throw new ExerciseNotSplittedException("exo", userExercise.getId());
     }
 }

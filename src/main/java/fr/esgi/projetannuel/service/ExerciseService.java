@@ -23,7 +23,7 @@ public class ExerciseService {
     }
 
     public Exercise getExercise(String id){
-        return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(Constants.EXERCISE, id));
+        return repository.findExerciseById(id).orElseThrow(() -> new ResourceNotFoundException(Constants.EXERCISE, id));
     }
 
     public Exercise getExerciseToDisplay(String id) { //codeService pour split
