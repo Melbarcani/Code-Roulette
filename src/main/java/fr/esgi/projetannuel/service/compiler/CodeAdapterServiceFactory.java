@@ -8,7 +8,7 @@ public class CodeAdapterServiceFactory {
     private CodeAdapterServiceFactory() {
     }
 
-    public static ICompilerService create(Language language){
+    public static AbstractCompilerService create(Language language){
         switch (language){
             case Java :
                 return new JavaAdapterService();

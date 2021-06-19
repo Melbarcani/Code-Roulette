@@ -8,6 +8,7 @@ import fr.esgi.projetannuel.model.Exercise;
 import fr.esgi.projetannuel.service.CodeService;
 import fr.esgi.projetannuel.service.ExerciseService;
 import fr.esgi.projetannuel.service.RestService;
+import fr.esgi.projetannuel.service.SessionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +24,7 @@ public class CodeController {
     private final CodeService codeService;
     private final RestService restService;
     private final ExerciseService exerciseService;
+    private final SessionService sessionService;
 
     @GetMapping
     public ResponseEntity<List<Code>> findAll(){
@@ -40,11 +42,10 @@ public class CodeController {
     }
 
     @PostMapping("/compileAndSave")
-    public ResponseEntity<CodeResult> compileAndSave(@RequestBody Exercise exercise){ // Should be exercise in the bodyRequest
-        var userExercise = exercise;
-
+    public ResponseEntity<CodeResult> compileAndSave(@RequestBody Exercise userExercise){ // Should be exercise in the bodyRequest
+        String userId = sessionService.getCurrentUser().getId();
         String entireUserCode = codeService.buildCodeToCompile(userExercise);
-        var compilationResult = restService.postCode(entireUserCode, userExercise.getLanguage());
+        var compilationResult = restService.postCode(entireUserCode, userExercise.getLanguage(), userExercise.getTitle(), userId);
         System.out.println(compilationResult);
         return new ResponseEntity<>(compilationResult, HttpStatus.OK);
     }

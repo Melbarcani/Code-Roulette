@@ -2,8 +2,12 @@ package fr.esgi.projetannuel.service;
 
 import fr.esgi.projetannuel.exception.ResourceNotFoundException;
 import fr.esgi.projetannuel.model.Session;
+import fr.esgi.projetannuel.model.User;
 import fr.esgi.projetannuel.repository.SessionRepository;
+import fr.esgi.projetannuel.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -14,6 +18,7 @@ import java.util.List;
 public class SessionService {
 
     private final SessionRepository repository;
+    private final UserRepository userRepository;
 
     public List<Session> findAll() {
         return repository.findAll();
@@ -30,5 +35,16 @@ public class SessionService {
     @Transactional
     public void deleteById(String id) {
         repository.deleteById(id);
+    }
+
+    public User getCurrentUser() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username;
+        if (principal instanceof UserDetails) {
+            username = ((UserDetails) principal).getUsername();
+        } else {
+            username = principal.toString();
+        }
+        return userRepository.findByEmail(username).orElseThrow(() -> new ResourceNotFoundException("session", "sessionId"));
     }
 }

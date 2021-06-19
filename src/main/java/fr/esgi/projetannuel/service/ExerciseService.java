@@ -6,7 +6,7 @@ import fr.esgi.projetannuel.model.Constants;
 import fr.esgi.projetannuel.model.Exercise;
 import fr.esgi.projetannuel.repository.ExerciseRepository;
 import fr.esgi.projetannuel.service.compiler.CodeAdapterServiceFactory;
-import fr.esgi.projetannuel.service.compiler.ICompilerService;
+import fr.esgi.projetannuel.service.compiler.AbstractCompilerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +28,7 @@ public class ExerciseService {
 
     public Exercise getExerciseToDisplay(String id) { //codeService pour split
         var exercise = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(Constants.EXERCISE, id));
-        ICompilerService compilerService = CodeAdapterServiceFactory.create(exercise.getLanguage());
+        AbstractCompilerService compilerService = CodeAdapterServiceFactory.create(exercise.getLanguage());
         String codeToDisplay = compilerService.createExerciseToDisplay(exercise.getId(), exercise.getCode());
         if(codeToDisplay == null || codeToDisplay.isBlank()){
             throw new ExerciseNotSplittedException(Constants.EXERCISE, id);

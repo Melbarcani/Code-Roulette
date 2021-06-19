@@ -20,6 +20,9 @@ public class Exercise {
     @Column(nullable = false)
     private String title;
 
+    @Column
+    private String description;
+
     @Column(columnDefinition="text", nullable = false)
     private String code;
 
@@ -100,5 +103,13 @@ public class Exercise {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }
