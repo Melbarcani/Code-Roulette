@@ -2,9 +2,9 @@ package fr.esgi.projetannuel.service;
 
 import fr.esgi.projetannuel.enumeration.Status;
 import fr.esgi.projetannuel.exception.ResourceNotFoundException;
-import fr.esgi.projetannuel.model.Code;
+import fr.esgi.projetannuel.model.Compilation;
 import fr.esgi.projetannuel.model.Exercise;
-import fr.esgi.projetannuel.repository.CodeRepository;
+import fr.esgi.projetannuel.repository.CompilationRepository;
 import fr.esgi.projetannuel.service.compiler.CodeAdapterServiceFactory;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,35 +15,39 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
-public class CodeService {
+public class CompilationService {
 
-    private final CodeRepository repository;
+    private final CompilationRepository repository;
     private final ExerciseService exerciseService;
 
-    public List<Code> findAll() {
+    public List<Compilation> findAll() {
         return repository.findAll();
     }
 
-    public Code findById(String id) {
+    public Compilation findById(String id) {
         return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("code", id));
     }
 
-    public Code create(String input) {
-        var code = new Code(input);
+    public Compilation create(String input) {
+        var code = new Compilation(input);
         return repository.save(code);
     }
 
-    public Code createWithOutput(String input, String output, Status status) {
-        var code = new Code(input, output, status);
+    public Compilation createFullCompilation(Compilation compilation) {
+        return repository.save(compilation);
+    }
+
+    public Compilation createWithOutput(String input, String output, Status status) {
+        var code = new Compilation(input, output, status);
         return repository.save(code);
     }
 
-    public Code updateOutput(Code code, String output, Status status) {
-        code.setStatus(status);
-        code.setOutput(output);
-        code.setCompiledAt(LocalDateTime.now());
+    public Compilation updateOutput(Compilation compilation, String output, Status status) {
+        compilation.setStatus(status);
+        compilation.setOutput(output);
+        compilation.setCompiledAt(LocalDateTime.now());
 
-        return repository.save(code);
+        return repository.save(compilation);
     }
 
     @Transactional

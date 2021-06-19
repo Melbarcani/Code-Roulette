@@ -14,7 +14,7 @@ public class User {
             name = "UUID",
             strategy = "org.hibernate.id.UUIDGenerator"
     )
-    @Column(updatable = false, nullable = false)
+    @Column(name = "profile_id", updatable = false, nullable = false)
     private String id;
 
     @Column(nullable = false)
@@ -34,6 +34,12 @@ public class User {
 
     @Column(nullable = false)
     private LocalDate birthDate;
+
+    @Column(nullable = false)
+    private Integer elo = 1000;
+
+    @Column(nullable = false)
+    private Integer elo_problems = 1000;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -113,5 +119,21 @@ public class User {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public int getElo() {
+        return elo;
+    }
+
+    public void setElo(int elo) {
+        this.elo = elo;
+    }
+
+    public int getElo_problems() {
+        return elo_problems;
+    }
+
+    public void setElo_problems(int elo_problems) {
+        this.elo_problems = elo_problems;
     }
 }

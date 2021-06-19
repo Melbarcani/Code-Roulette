@@ -1,11 +1,11 @@
 package fr.esgi.projetannuel.controller;
 
 import fr.esgi.projetannuel.enumeration.Status;
-import fr.esgi.projetannuel.model.Code;
+import fr.esgi.projetannuel.model.Compilation;
 import fr.esgi.projetannuel.model.CodeResult;
 import fr.esgi.projetannuel.model.Constants;
 import fr.esgi.projetannuel.model.Exercise;
-import fr.esgi.projetannuel.service.CodeService;
+import fr.esgi.projetannuel.service.CompilationService;
 import fr.esgi.projetannuel.service.ExerciseService;
 import fr.esgi.projetannuel.service.RestService;
 import fr.esgi.projetannuel.service.SessionService;
@@ -20,38 +20,49 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/code")
 @RequiredArgsConstructor
-public class CodeController {
-    private final CodeService codeService;
+public class CompilationController {
+    private final CompilationService compilationService;
     private final RestService restService;
     private final ExerciseService exerciseService;
     private final SessionService sessionService;
 
     @GetMapping
-    public ResponseEntity<List<Code>> findAll(){
-        return new ResponseEntity<>(codeService.findAll(), HttpStatus.OK);
+    public ResponseEntity<List<Compilation>> findAll(){
+        return new ResponseEntity<>(compilationService.findAll(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Code> findById(@PathVariable String id){
-        return new ResponseEntity<>(codeService.findById(id), HttpStatus.OK);
+    public ResponseEntity<Compilation> findById(@PathVariable String id){
+        return new ResponseEntity<>(compilationService.findById(id), HttpStatus.OK);
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Code> save(@RequestBody String input){
-        return new ResponseEntity<>(codeService.create(input), HttpStatus.CREATED);
+    public ResponseEntity<Compilation> save(@RequestBody String input){
+        return new ResponseEntity<>(compilationService.create(input), HttpStatus.CREATED);
     }
 
     @PostMapping("/compileAndSave")
-    public ResponseEntity<CodeResult> compileAndSave(@RequestBody Exercise userExercise){ // Should be exercise in the bodyRequest
+    public ResponseEntity<Compilation> compileAndSave(@RequestBody Exercise userExercise){ // Should be exercise in the bodyRequest
         String userId = sessionService.getCurrentUser().getId();
-        String entireUserCode = codeService.buildCodeToCompile(userExercise);
+        String entireUserCode = compilationService.buildCodeToCompile(userExercise);
         var compilationResult = restService.postCode(entireUserCode, userExercise.getLanguage(), userExercise.getTitle(), userId);
         System.out.println(compilationResult);
-        return new ResponseEntity<>(compilationResult, HttpStatus.OK);
+
+        Compilation compilation = new Compilation(
+                entireUserCode,
+                compilationResult.getOutputConsole(),
+                compilationResult.getStatus(),
+                sessionService.getCurrentUser(),
+                userExercise
+        );
+
+        compilationService.createFullCompilation(compilation);
+
+        return new ResponseEntity<>(compilation, HttpStatus.OK);
     }
 
     @PostMapping("/compile")
-    public ResponseEntity<Code> saveCompiledCode(@RequestBody String input){
+    public ResponseEntity<Compilation> saveCompiledCode(@RequestBody String input){
         var restTemplate = new RestTemplate();
 
         ResponseEntity<String> responseEntity = restTemplate.postForEntity(Constants.COMPILER_BASE_URL, input, String.class);
@@ -65,17 +76,17 @@ public class CodeController {
             status = Status.SUCCESS;
         }
 
-        return new ResponseEntity<>(codeService.createWithOutput(input, output, status), HttpStatus.CREATED);
+        return new ResponseEntity<>(compilationService.createWithOutput(input, output, status), HttpStatus.CREATED);
     }
 
     @PostMapping("/compile/{id}")
-    public ResponseEntity<Code> compileById(@PathVariable String id){
-        Code code = codeService.findById(id);
+    public ResponseEntity<Compilation> compileById(@PathVariable String id){
+        Compilation compilation = compilationService.findById(id);
 
         String uri = Constants.COMPILER_BASE_URL;
         RestTemplate restTemplate = new RestTemplate();
 
-        ResponseEntity<String> responseEntity = restTemplate.postForEntity(uri, code.getInput(), String.class);
+        ResponseEntity<String> responseEntity = restTemplate.postForEntity(uri, compilation.getInput(), String.class);
 
         String output = responseEntity.getBody();
         Status status = Status.ERROR;
@@ -84,12 +95,12 @@ public class CodeController {
             status = Status.SUCCESS;
         }
 
-        return new ResponseEntity<>(codeService.updateOutput(code, output, status), HttpStatus.OK);
+        return new ResponseEntity<>(compilationService.updateOutput(compilation, output, status), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable String id) {
-        codeService.deleteById(id);
+        compilationService.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

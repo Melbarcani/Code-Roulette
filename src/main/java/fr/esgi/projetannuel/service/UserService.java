@@ -32,4 +32,9 @@ public class UserService {
     public void deleteById(String id) {
         repository.deleteById(id);
     }
+
+    public User updateElo(User user, int elo) {
+        user.setElo(user.getElo() + elo);
+        return repository.save(user);
+    }
 }

@@ -38,4 +38,9 @@ public class UserController {
         userService.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @PostMapping("/updateElo/{id}")
+    public ResponseEntity<User> compileById(@PathVariable String id, @RequestBody int elo){
+        return new ResponseEntity<>(userService.updateElo(userService.findById(id), elo), HttpStatus.OK);
+    }
 }

@@ -14,7 +14,7 @@ public class Exercise {
             name = "UUID",
             strategy = "org.hibernate.id.UUIDGenerator"
     )
-    @Column(updatable = false, nullable = false)
+    @Column(name = "exercise_id", updatable = false, nullable = false)
     private String id;
 
     @Column(nullable = false)
@@ -48,10 +48,11 @@ public class Exercise {
         this.createdAt = LocalDateTime.now();
     }
 
-    public Exercise(String id, String title, String code, Language language) {
+    public Exercise(String id, String title, String code, String description, Language language) {
         this.id = id;
         this.title = title;
         this.code = code;
+        this.description = description;
         this.language = language;
 
         this.createdAt = LocalDateTime.now();

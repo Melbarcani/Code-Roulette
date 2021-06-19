@@ -7,7 +7,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-public class Code {
+public class Compilation {
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(
@@ -23,9 +23,13 @@ public class Code {
     @Column(columnDefinition="text", nullable = true)
     private String output;
 
-/*    @OneToOne
-    @JoinColumn(nullable = true)
-    private User user;*/
+    @OneToOne()
+    @JoinColumn(name = "profile_id", referencedColumnName = "profile_id")
+    private User user;
+
+    @OneToOne()
+    @JoinColumn(name = "exercise_id", referencedColumnName = "exercise_id")
+    private Exercise exercise;
 
     @Column(nullable = true)
     @Enumerated(EnumType.STRING)
@@ -40,19 +44,30 @@ public class Code {
     @Column(nullable = true)
     private LocalDateTime compiledAt;
 
-    public Code() {
+    public Compilation() {
         this.createdAt = LocalDateTime.now();
     }
 
-    public Code(String input) {
+    public Compilation(String input) {
         this.input = input;
         this.createdAt = LocalDateTime.now();
     }
 
-    public Code(String input, String output, Status status) {
+    public Compilation(String input, String output, Status status) {
         this.input = input;
         this.output = output;
         this.status = status;
+
+        this.createdAt = LocalDateTime.now();
+        this.compiledAt = LocalDateTime.now();
+    }
+
+    public Compilation(String input, String output, Status status, User user, Exercise exercise) {
+        this.input = input;
+        this.output = output;
+        this.status = status;
+        this.user = user;
+        this.exercise = exercise;
 
         this.createdAt = LocalDateTime.now();
         this.compiledAt = LocalDateTime.now();
@@ -112,5 +127,21 @@ public class Code {
 
     public void setCompiledAt(LocalDateTime compiledAt) {
         this.compiledAt = compiledAt;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Exercise getExercise() {
+        return exercise;
+    }
+
+    public void setExercise(Exercise exercise) {
+        this.exercise = exercise;
     }
 }
