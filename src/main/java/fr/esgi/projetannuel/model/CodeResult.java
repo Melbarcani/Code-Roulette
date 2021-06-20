@@ -8,10 +8,12 @@ public class CodeResult {
     private String outputConsole;
     private Status status;
     private String userId;
+    private long instructionsCount;
 
-    public CodeResult(String outputConsole, Status status) {
+    public CodeResult(String outputConsole, Status status, long instructionsCount) {
         this.outputConsole = outputConsole;
         this.status = status;
+        this.instructionsCount = instructionsCount;
         userId = null;
     }
 }

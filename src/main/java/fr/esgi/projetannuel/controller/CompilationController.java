@@ -5,10 +5,7 @@ import fr.esgi.projetannuel.model.Compilation;
 import fr.esgi.projetannuel.model.CodeResult;
 import fr.esgi.projetannuel.model.Constants;
 import fr.esgi.projetannuel.model.Exercise;
-import fr.esgi.projetannuel.service.CompilationService;
-import fr.esgi.projetannuel.service.ExerciseService;
-import fr.esgi.projetannuel.service.RestService;
-import fr.esgi.projetannuel.service.SessionService;
+import fr.esgi.projetannuel.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +24,7 @@ public class CompilationController {
     private final RestService restService;
     private final ExerciseService exerciseService;
     private final SessionService sessionService;
+    private final ScoreService scoreService;
 
     @GetMapping
     public ResponseEntity<List<Compilation>> findAll(){
@@ -44,13 +42,11 @@ public class CompilationController {
     }
 
     @PostMapping("/compileAndSave")
-    public ResponseEntity<Compilation> compileAndSave(@RequestBody Exercise userExercise){ // Should be exercise in the bodyRequest
+    public ResponseEntity<Compilation> compileAndSave(@RequestBody Exercise userExercise/*, long spentTime*/){
         String userId = sessionService.getCurrentUser().getId();
         String entireUserCode = compilationService.buildCodeToCompile(userExercise);
         var compilationResult = restService.postCode(entireUserCode, userExercise.getLanguage(), userExercise.getTitle(), userId);
-        System.out.println("Lines count : " + (Arrays.stream(userExercise.getCode().split("\\{|}")).count()
-                + Arrays.stream(userExercise.getCode().split("\\;")).count() - 1));
-        System.out.println(compilationResult);
+        long score = scoreService.computeScore(userExercise.getInitialInstructionsCount(), compilationResult.getInstructionsCount()/*, time*/);
 
         Compilation compilation = new Compilation(
                 entireUserCode,

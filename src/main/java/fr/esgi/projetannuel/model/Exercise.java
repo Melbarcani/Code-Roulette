@@ -30,6 +30,9 @@ public class Exercise {
     @Enumerated(EnumType.STRING)
     private Language language;
 
+    @Column(nullable = false)
+    private long initialInstructionsCount;
+
     @Column(nullable = true)
     private LocalDateTime createdAt;
 
@@ -112,5 +115,13 @@ public class Exercise {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public long getInitialInstructionsCount() {
+        return initialInstructionsCount;
+    }
+
+    public void setInitialInstructionsCount(long initialInstructionsCount) {
+        this.initialInstructionsCount = initialInstructionsCount;
     }
 }
