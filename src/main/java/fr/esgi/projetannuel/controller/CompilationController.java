@@ -15,7 +15,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.StringTokenizer;
 
 @RestController
 @RequestMapping("/api/code")
@@ -46,6 +48,8 @@ public class CompilationController {
         String userId = sessionService.getCurrentUser().getId();
         String entireUserCode = compilationService.buildCodeToCompile(userExercise);
         var compilationResult = restService.postCode(entireUserCode, userExercise.getLanguage(), userExercise.getTitle(), userId);
+        System.out.println("Lines count : " + (Arrays.stream(userExercise.getCode().split("\\{|}")).count()
+                + Arrays.stream(userExercise.getCode().split("\\;")).count() - 1));
         System.out.println(compilationResult);
 
         Compilation compilation = new Compilation(
