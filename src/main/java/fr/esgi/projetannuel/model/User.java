@@ -45,6 +45,10 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role = Role.USER;
 
+    @OneToOne
+    @JoinColumn(name = "queue_id", referencedColumnName = "queue_id")
+    private Queue queue;
+
     public User() {}
 
     public User(String id, String firstName, String lastName, String email, String userName, String password, LocalDate birthDate) {
@@ -135,5 +139,21 @@ public class User {
 
     public void setElo_problems(int elo_problems) {
         this.elo_problems = elo_problems;
+    }
+
+    public void setElo(Integer elo) {
+        this.elo = elo;
+    }
+
+    public void setElo_problems(Integer elo_problems) {
+        this.elo_problems = elo_problems;
+    }
+
+    public Queue getQueue() {
+        return queue;
+    }
+
+    public void setQueue(Queue queue) {
+        this.queue = queue;
     }
 }
