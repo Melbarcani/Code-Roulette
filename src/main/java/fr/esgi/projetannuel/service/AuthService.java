@@ -48,7 +48,7 @@ public class AuthService {
 
         var userSaved = userRepository.save(user);
         String id = userSaved.getId();
-        return UriComponentsBuilder.fromPath("/api/users").path("/{id}").buildAndExpand(id).toUri();
+        return UriComponentsBuilder.fromPath("/api/user").path("/{id}").buildAndExpand(id).toUri();
     }
 
     public User findUserByEmail(String email){

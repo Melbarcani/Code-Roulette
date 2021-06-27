@@ -12,16 +12,20 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
+import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 
 @Configuration
 @EnableWebMvc
 public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebMvcConfigurer {
 
     private static final String[] USER_ENDPOINTS = {
-            "/api/users/**",
+            "/api/user/**",
             "/api/session/**",
             "/api/code/**",
-            "/api/exercise/**"
+            "/api/exercise/**",
+            "/api/lobby/**",
+            "/api/queue/**"
     };
     private final TokenProvider tokenProvider;
 
@@ -42,6 +46,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
                 .authorizeRequests()
                 .antMatchers("/api/auth/**").permitAll()
                 .antMatchers("/api/exercise/compile").permitAll()
+                .antMatchers("/api/socket/**").permitAll()
                 .antMatchers(USER_ENDPOINTS).hasRole(Role.USER.toString())
                 .anyRequest().authenticated()
                 

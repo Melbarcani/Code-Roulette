@@ -1,7 +1,6 @@
 package fr.esgi.projetannuel.controller;
 
 import fr.esgi.projetannuel.model.User;
-import fr.esgi.projetannuel.service.SessionService;
 import fr.esgi.projetannuel.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api/user")
 public class UserController {
 
     private final UserService userService;
