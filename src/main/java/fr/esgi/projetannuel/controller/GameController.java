@@ -28,6 +28,11 @@ public class GameController {
         return new ResponseEntity<>(gameService.findById(id), HttpStatus.OK);
     }
 
+    @GetMapping("/games/{userId}")
+    public ResponseEntity<List<Game>> findByUserId(@PathVariable String userId){
+        return new ResponseEntity<>(gameService.findByUserId(userId), HttpStatus.OK);
+    }
+
     @PostMapping("/create")
     public ResponseEntity<Game> save(@RequestBody Game game){
         return new ResponseEntity<>(gameService.create(game), HttpStatus.CREATED);
