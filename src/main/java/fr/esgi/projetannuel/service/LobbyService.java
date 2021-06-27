@@ -1,6 +1,7 @@
 package fr.esgi.projetannuel.service;
 
 import fr.esgi.projetannuel.exception.ResourceNotFoundException;
+import fr.esgi.projetannuel.exception.UserAlreadyInLobbyException;
 import fr.esgi.projetannuel.model.Lobby;
 import fr.esgi.projetannuel.model.User;
 import fr.esgi.projetannuel.repository.LobbyRepository;
@@ -10,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -28,8 +29,20 @@ public class LobbyService {
         return lobbyRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("lobby", id));
     }
 
-    public Lobby create(Lobby lobby) {
-        return lobbyRepository.save(lobby);
+    public User create(String userId, String lobbyTitle) {
+        Optional<User> user = userRepository.findById(userId);
+
+        if(user.isPresent()) {
+            User userPresent = user.get();
+            Lobby lobby = new Lobby(lobbyTitle);
+            lobby.getUsers().add(userPresent);
+            lobbyRepository.save(lobby);
+
+            userPresent.setLobbyId(lobby.getId());
+            return userRepository.save(userPresent);
+        }
+
+        throw new UserAlreadyInLobbyException(userId);
     }
 
     @Transactional
@@ -38,25 +51,33 @@ public class LobbyService {
     }
 
     @Transactional
-    public void joinLobby(String lobbyId) {
+    public User joinLobby(String lobbyId) {
         User userConnected = sessionService.getCurrentUser();
+        userConnected.setLobbyId(lobbyId);
+
         Lobby lobby = findById(lobbyId);
-        userConnected.setLobby(lobby);
-        userRepository.save(userConnected);
+        lobby.getUsers().add(userConnected);
+        lobbyRepository.save(lobby);
+
+        return userRepository.save(userConnected);
     }
 
     @Transactional
     public void leaveLobby(String lobbyId) {
         User userConnected = sessionService.getCurrentUser();
         Lobby lobby = findById(lobbyId);
-        userConnected.setLobby(null);
-        userRepository.save(userConnected);
-    }
 
-    public List<User> lobbyUsers(String lobbyId) {
-        return userRepository.findAll()
-                .stream()
-                .filter(userStream -> userStream.getLobby().getId().equals(lobbyId))
-                .collect(Collectors.toList());
+        if(lobby != null) {
+            lobby.getUsers().remove(userConnected);
+
+            if(lobby.getUsers().size() == 0){
+                deleteById(lobbyId);
+            }else {
+                lobbyRepository.save(lobby);
+            }
+        }
+
+        userConnected.setLobbyId(null);
+        userRepository.save(userConnected);
     }
 }

@@ -1,6 +1,7 @@
 package fr.esgi.projetannuel.controller;
 
 import fr.esgi.projetannuel.model.User;
+import fr.esgi.projetannuel.service.SessionService;
 import fr.esgi.projetannuel.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +27,11 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<User> findById(@PathVariable String id){
         return new ResponseEntity<>(userService.findById(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/token/{token}")
+    public ResponseEntity<User> findByToken(@PathVariable String token){
+        return new ResponseEntity<>(userService.findByToken(token).getUser(), HttpStatus.OK);
     }
 
     @PostMapping("/create")

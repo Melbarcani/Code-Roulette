@@ -49,9 +49,7 @@ public class User {
     @JoinColumn(name = "queue_id", referencedColumnName = "queue_id")
     private Queue queue;
 
-    @OneToOne
-    @JoinColumn(name = "lobby_id", referencedColumnName = "lobby_id")
-    private Lobby lobby;
+    private String lobbyId;
 
     public User() {}
 
@@ -161,11 +159,11 @@ public class User {
         this.queue = queue;
     }
 
-    public Lobby getLobby() {
-        return lobby;
+    public String getLobbyId() {
+        return lobbyId;
     }
 
-    public void setLobby(Lobby lobby) {
-        this.lobby = lobby;
+    public void setLobbyId(String lobbyId) {
+        this.lobbyId = lobbyId;
     }
 }

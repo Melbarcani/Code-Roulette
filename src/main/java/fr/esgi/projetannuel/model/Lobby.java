@@ -2,11 +2,11 @@ package fr.esgi.projetannuel.model;
 
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 @Entity
 public class Lobby {
@@ -25,7 +25,14 @@ public class Lobby {
     @Column(nullable = true)
     private LocalDateTime createdAt;
 
+    @OneToMany
+    private List<User> users = new ArrayList<>();
+
     public Lobby() {}
+    public Lobby(String title) {
+        this.title = title;
+        this.createdAt = LocalDateTime.now();
+    }
 
     public Lobby(String id, String title, LocalDateTime createdAt) {
         this.id = id;
@@ -55,5 +62,13 @@ public class Lobby {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
     }
 }

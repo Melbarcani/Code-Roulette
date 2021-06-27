@@ -22,6 +22,11 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(exception, exception.getErrors(), new HttpHeaders(), exception.getStatusCode(), request);
     }
 
+    @ExceptionHandler(UserAlreadyInLobbyException.class)
+    protected ResponseEntity<?> handleUserAlreadyInLobby(UserAlreadyInLobbyException exception, WebRequest request){
+        return handleExceptionInternal(exception, exception.getErrors(), new HttpHeaders(), HttpStatus.CONFLICT, request);
+    }
+
     @ExceptionHandler(DataIntegrityViolationException.class)
     protected ResponseEntity<?> handleDataIntegrityViolation(DataIntegrityViolationException exception, WebRequest request){
             Map<String, String> errors = new HashMap<>();

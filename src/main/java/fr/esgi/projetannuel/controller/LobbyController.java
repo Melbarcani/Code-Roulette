@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/lobby")
@@ -28,25 +29,20 @@ public class LobbyController {
         return new ResponseEntity<>(lobbyService.findById(id), HttpStatus.OK);
     }
 
-    @GetMapping("/lobbyUsers")
-    public ResponseEntity<List<User>> getLobbyUsers(@RequestBody String lobbyId){
-        return new ResponseEntity<>(lobbyService.lobbyUsers(lobbyId), HttpStatus.OK);
-    }
-
-    @PostMapping("/create")
-    public ResponseEntity<Lobby> save(@RequestBody Lobby lobby){
-        return new ResponseEntity<>(lobbyService.create(lobby), HttpStatus.CREATED);
+    @PostMapping("/create/{userId}")
+    public ResponseEntity<User> create(@PathVariable String userId, @RequestBody String lobbyTitle){
+        return new ResponseEntity<>(lobbyService.create(userId, lobbyTitle), HttpStatus.CREATED);
     }
 
     @PostMapping("/joinLobby")
-    public ResponseEntity<?> joinLobby(@RequestBody String lobbyId){
-        lobbyService.joinLobby(lobbyId);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<User> joinLobby(@RequestBody String lobbyId){
+        return new ResponseEntity<>(lobbyService.joinLobby(lobbyId), HttpStatus.OK);
     }
 
     @PostMapping("/leaveLobby")
-    public ResponseEntity<Lobby> leaveLobby(@RequestBody Lobby lobby){
-        return new ResponseEntity<>(lobbyService.create(lobby), HttpStatus.CREATED);
+    public ResponseEntity<?> leaveLobby(@RequestBody String lobbyId){
+        lobbyService.leaveLobby(lobbyId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping("/{id}")
