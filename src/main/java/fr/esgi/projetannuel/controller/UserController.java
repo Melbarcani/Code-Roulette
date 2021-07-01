@@ -48,4 +48,16 @@ public class UserController {
     public ResponseEntity<User> compileById(@PathVariable String id, @RequestBody int elo){
         return new ResponseEntity<>(userService.updateElo(userService.findById(id), elo), HttpStatus.OK);
     }
+
+    @PostMapping("/joinQueue")
+    public ResponseEntity<List<User>> joinQueue(){
+        return new ResponseEntity<>(userService.joinQueue(), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/leaveQueue")
+    public ResponseEntity<?> leaveQueue() {
+        userService.leaveQueue();
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
 }

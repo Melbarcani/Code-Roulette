@@ -39,15 +39,14 @@ public class User {
     private Integer elo = 1000;
 
     @Column(nullable = false)
-    private Integer elo_problems = 1000;
+    private Integer eloProblems = 1000;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role = Role.USER;
 
-    @OneToOne
-    @JoinColumn(name = "queue_id", referencedColumnName = "queue_id")
-    private Queue queue;
+    @Column(nullable = false)
+    private Boolean isInQueue = false;
 
     private String lobbyId;
 
@@ -61,6 +60,7 @@ public class User {
         this.userName = userName;
         this.password = password;
         this.birthDate = birthDate;
+        this.isInQueue = false;
     }
 
     public String getId() {
@@ -135,28 +135,24 @@ public class User {
         this.elo = elo;
     }
 
-    public int getElo_problems() {
-        return elo_problems;
-    }
-
-    public void setElo_problems(int elo_problems) {
-        this.elo_problems = elo_problems;
-    }
-
     public void setElo(Integer elo) {
         this.elo = elo;
     }
 
-    public void setElo_problems(Integer elo_problems) {
-        this.elo_problems = elo_problems;
+    public Integer getEloProblems() {
+        return eloProblems;
     }
 
-    public Queue getQueue() {
-        return queue;
+    public void setEloProblems(Integer eloProblems) {
+        this.eloProblems = eloProblems;
     }
 
-    public void setQueue(Queue queue) {
-        this.queue = queue;
+    public Boolean getInQueue() {
+        return isInQueue;
+    }
+
+    public void setInQueue(Boolean inQueue) {
+        isInQueue = inQueue;
     }
 
     public String getLobbyId() {

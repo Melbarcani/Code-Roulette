@@ -24,8 +24,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
             "/api/session/**",
             "/api/code/**",
             "/api/exercise/**",
-            "/api/lobby/**",
-            "/api/queue/**"
+            "/api/lobby/**"
     };
     private final TokenProvider tokenProvider;
 
