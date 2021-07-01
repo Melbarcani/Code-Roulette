@@ -1,31 +1,40 @@
 package fr.esgi.projetannuel.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import fr.esgi.projetannuel.model.Chat;
+import fr.esgi.projetannuel.model.Message;
+import fr.esgi.projetannuel.model.User;
+import fr.esgi.projetannuel.service.ChatService;
+import fr.esgi.projetannuel.service.MessageService;
+import fr.esgi.projetannuel.service.UserService;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 
-@RestController
-@RequestMapping("/api/socket")
+@Controller
 public class WebSocketController {
 
-    private final SimpMessagingTemplate template;
+    private final MessageService messageService;
+    private final ChatService chatService;
+    private final UserService userService;
 
-    @Autowired
-    WebSocketController(SimpMessagingTemplate template){
-        this.template = template;
+    public WebSocketController(UserService userService, ChatService chatService, MessageService messageService) {
+        this.userService = userService;
+        this.chatService = chatService;
+        this.messageService = messageService;
     }
 
-    @GetMapping
-    public String get(){
-        return "WebSocketController";
-    }
+    @MessageMapping("/hello")
+    @SendTo("/socket/chat")
+    public Message greeting(@RequestBody ObjectNode objectJson) {
+        String chatId = objectJson.get("chatId").asText();
+        String messageContent = objectJson.get("message").asText();
+        String userId = objectJson.get("userId").asText();
 
-    @MessageMapping("/send/message")
-    public void sendMessage(String message){
-        System.out.println(message);
-        this.template.convertAndSend("/message",  message);
+        Message message = messageService.create(new Message(messageContent, userService.findById(userId)));
+        chatService.addMessage(chatService.findById(chatId), message);
+
+        return message;
     }
 }

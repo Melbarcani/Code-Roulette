@@ -20,6 +20,9 @@ public class Game {
     @OneToOne
     private Exercise exercise;
 
+    @OneToOne
+    private Chat chat;
+
     @OneToMany
     private List<User> users = new ArrayList<>();
 
@@ -52,5 +55,13 @@ public class Game {
 
     public void setUsers(List<User> users) {
         this.users = users;
+    }
+
+    public Chat getChat() {
+        return chat;
+    }
+
+    public void setChat(Chat chat) {
+        this.chat = chat;
     }
 }

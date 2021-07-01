@@ -1,8 +1,10 @@
 package fr.esgi.projetannuel.service;
 
 import fr.esgi.projetannuel.exception.ResourceNotFoundException;
+import fr.esgi.projetannuel.model.Chat;
 import fr.esgi.projetannuel.model.Game;
 import fr.esgi.projetannuel.model.User;
+import fr.esgi.projetannuel.repository.ChatRepository;
 import fr.esgi.projetannuel.repository.GameRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -10,25 +12,25 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 public class GameService {
-    private final GameRepository repository;
+    private final GameRepository gameRepository;
+    private final ChatRepository chatRepository;
 
     public List<Game> findAll() {
-        return repository.findAll();
+        return gameRepository.findAll();
     }
 
     public Game findById(String id) {
-        return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Game", id));
+        return gameRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Game", id));
     }
 
     public List<Game> findByUserId(String userId) {
         List<Game> gamesOfUser = new ArrayList<>();
 
-        for (Game game: repository.findAll()) {
+        for (Game game: gameRepository.findAll()) {
             for(User user: game.getUsers()) {
                 if(user.getId().equals(userId)){
                     gamesOfUser.add(game);
@@ -40,11 +42,12 @@ public class GameService {
     }
 
     public Game create(Game game) {
-        return repository.save(game);
+        game.setChat(chatRepository.save(new Chat()));
+        return gameRepository.save(game);
     }
 
     @Transactional
     public void deleteById(String id) {
-        repository.deleteById(id);
+        gameRepository.deleteById(id);
     }
 }
