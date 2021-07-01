@@ -10,7 +10,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -81,5 +80,12 @@ public class UserService {
         User user = sessionService.getCurrentUser();
         user.setInQueue(false);
         userRepository.save(user);
+    }
+
+    public Long usersInQueue() {
+        return userRepository.findAll()
+                .stream()
+                .filter(User::getInQueue)
+                .count();
     }
 }

@@ -12,9 +12,11 @@ import java.util.List;
 @RequestMapping("/api/user")
 public class UserController {
 
+    private final WebSocketController webSocketController;
     private final UserService userService;
 
-    public UserController(UserService userService) {
+    public UserController(WebSocketController webSocketController, UserService userService) {
+        this.webSocketController = webSocketController;
         this.userService = userService;
     }
 
@@ -51,13 +53,23 @@ public class UserController {
 
     @PostMapping("/joinQueue")
     public ResponseEntity<List<User>> joinQueue(){
-        return new ResponseEntity<>(userService.joinQueue(), HttpStatus.OK);
+        var result = userService.joinQueue();
+        // webSocketController.updateQueueCounter();
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @DeleteMapping("/leaveQueue")
     public ResponseEntity<?> leaveQueue() {
         userService.leaveQueue();
+        // webSocketController.updateQueueCounter();
+
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/usersInQueue")
+    public ResponseEntity<Long> countUsersInQueue() {
+        return new ResponseEntity<>(userService.usersInQueue(), HttpStatus.OK);
     }
 
 }

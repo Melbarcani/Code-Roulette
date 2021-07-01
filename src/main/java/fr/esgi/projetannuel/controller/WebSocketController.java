@@ -1,9 +1,7 @@
 package fr.esgi.projetannuel.controller;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import fr.esgi.projetannuel.model.Chat;
 import fr.esgi.projetannuel.model.Message;
-import fr.esgi.projetannuel.model.User;
 import fr.esgi.projetannuel.service.ChatService;
 import fr.esgi.projetannuel.service.MessageService;
 import fr.esgi.projetannuel.service.UserService;
@@ -36,5 +34,11 @@ public class WebSocketController {
         chatService.addMessage(chatService.findById(chatId), message);
 
         return message;
+    }
+
+    @MessageMapping("/socket/updateQueueCounter")
+    @SendTo("/socket/updateQueueCounter")
+    public int updateQueueCounter() {
+        return 0;
     }
 }

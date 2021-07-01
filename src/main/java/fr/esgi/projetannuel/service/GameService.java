@@ -6,6 +6,7 @@ import fr.esgi.projetannuel.model.Game;
 import fr.esgi.projetannuel.model.User;
 import fr.esgi.projetannuel.repository.ChatRepository;
 import fr.esgi.projetannuel.repository.GameRepository;
+import fr.esgi.projetannuel.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 public class GameService {
     private final GameRepository gameRepository;
+    private final UserRepository userRepository;
     private final ChatRepository chatRepository;
 
     public List<Game> findAll() {
@@ -42,6 +44,10 @@ public class GameService {
     }
 
     public Game create(Game game) {
+        for( User userIg : game.getUsers()){
+            userIg.setInQueue(false);
+            userRepository.save(userIg);
+        }
         game.setChat(chatRepository.save(new Chat()));
         return gameRepository.save(game);
     }
