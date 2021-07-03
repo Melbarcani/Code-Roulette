@@ -4,8 +4,10 @@ import fr.esgi.projetannuel.exception.ResourceNotFoundException;
 import fr.esgi.projetannuel.model.Chat;
 import fr.esgi.projetannuel.model.Game;
 import fr.esgi.projetannuel.model.User;
+import fr.esgi.projetannuel.model.UserInGame;
 import fr.esgi.projetannuel.repository.ChatRepository;
 import fr.esgi.projetannuel.repository.GameRepository;
+import fr.esgi.projetannuel.repository.UserInGameRepository;
 import fr.esgi.projetannuel.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,7 @@ import java.util.List;
 public class GameService {
     private final GameRepository gameRepository;
     private final UserRepository userRepository;
+    private final UserInGameRepository userInGameRepository;
     private final ChatRepository chatRepository;
 
     public List<Game> findAll() {
@@ -33,8 +36,8 @@ public class GameService {
         List<Game> gamesOfUser = new ArrayList<>();
 
         for (Game game: gameRepository.findAll()) {
-            for(User user: game.getUsers()) {
-                if(user.getId().equals(userId)){
+            for (UserInGame userInGame: game.getUsersInGame()) {
+                if(userInGame.getUser().getId().equals(userId)){
                     gamesOfUser.add(game);
                 }
             }
@@ -44,10 +47,16 @@ public class GameService {
     }
 
     public Game create(Game game) {
-        for( User userIg : game.getUsers()){
-            userIg.setInQueue(false);
-            userRepository.save(userIg);
+        List<UserInGame> usersInGameSaved = new ArrayList<>();
+
+        for(UserInGame userInGame: game.getUsersInGame()) {
+            User user = userInGame.getUser();
+            user.setInQueue(false);
+            userRepository.save(user);
+
+            usersInGameSaved.add(userInGameRepository.save(userInGame));
         }
+        game.setUsersInGame(usersInGameSaved);
         game.setChat(chatRepository.save(new Chat()));
         return gameRepository.save(game);
     }

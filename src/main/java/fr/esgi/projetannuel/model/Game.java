@@ -24,7 +24,10 @@ public class Game {
     private Chat chat;
 
     @OneToMany
-    private List<User> users = new ArrayList<>();
+    private List<UserInGame> usersInGame = new ArrayList<>();
+
+    @Column
+    boolean isGameOver = false;
 
     public Game() {}
 
@@ -49,19 +52,27 @@ public class Game {
         this.exercise = exercise;
     }
 
-    public List<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(List<User> users) {
-        this.users = users;
-    }
-
     public Chat getChat() {
         return chat;
     }
 
     public void setChat(Chat chat) {
         this.chat = chat;
+    }
+
+    public List<UserInGame> getUsersInGame() {
+        return usersInGame;
+    }
+
+    public void setUsersInGame(List<UserInGame> usersInGame) {
+        this.usersInGame = usersInGame;
+    }
+
+    public boolean isGameOver() {
+        return isGameOver;
+    }
+
+    public void setGameOver(boolean gameOver) {
+        isGameOver = gameOver;
     }
 }

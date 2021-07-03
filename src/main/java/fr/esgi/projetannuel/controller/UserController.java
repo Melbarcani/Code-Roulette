@@ -12,11 +12,9 @@ import java.util.List;
 @RequestMapping("/api/user")
 public class UserController {
 
-    private final WebSocketController webSocketController;
     private final UserService userService;
 
-    public UserController(WebSocketController webSocketController, UserService userService) {
-        this.webSocketController = webSocketController;
+    public UserController(UserService userService) {
         this.userService = userService;
     }
 
@@ -47,23 +45,19 @@ public class UserController {
     }
 
     @PostMapping("/updateElo/{id}")
-    public ResponseEntity<User> compileById(@PathVariable String id, @RequestBody int elo){
+    public ResponseEntity<User> updateElo(@PathVariable String id, @RequestBody int elo){
         return new ResponseEntity<>(userService.updateElo(userService.findById(id), elo), HttpStatus.OK);
     }
 
     @PostMapping("/joinQueue")
     public ResponseEntity<List<User>> joinQueue(){
         var result = userService.joinQueue();
-        // webSocketController.updateQueueCounter();
-
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @DeleteMapping("/leaveQueue")
     public ResponseEntity<?> leaveQueue() {
         userService.leaveQueue();
-        // webSocketController.updateQueueCounter();
-
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
