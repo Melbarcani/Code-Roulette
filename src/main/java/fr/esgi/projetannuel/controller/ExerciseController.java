@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Random;
 
 @RestController
 @RequestMapping("/api/exercise")
@@ -35,5 +36,21 @@ public class ExerciseController
     public ResponseEntity<?> delete(@PathVariable String id) {
         exerciseService.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/random")
+    public ResponseEntity<Exercise> getRandom(){
+        List<Exercise> exercises = exerciseService.findAll();
+        Exercise exercise;
+
+        if(exercises.size() == 1) {
+            exercise = exercises.get(0);
+            return new ResponseEntity<>(exercise, HttpStatus.OK);
+        }
+
+        Random rand = new Random();
+        exercise = exercises.get(rand.nextInt(exercises.size() - 1));
+
+        return new ResponseEntity<>(exercise, HttpStatus.OK);
     }
 }
