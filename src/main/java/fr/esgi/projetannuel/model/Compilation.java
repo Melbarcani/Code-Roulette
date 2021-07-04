@@ -44,6 +44,9 @@ public class Compilation {
     @Column(nullable = true)
     private LocalDateTime compiledAt;
 
+    @Column(nullable = true)
+    private long score;
+
     public Compilation() {
         this.createdAt = LocalDateTime.now();
     }
@@ -62,12 +65,13 @@ public class Compilation {
         this.compiledAt = LocalDateTime.now();
     }
 
-    public Compilation(String input, String output, Status status, User user, Exercise exercise) {
+    public Compilation(String input, String output, Status status, User user, Exercise exercise, long score) {
         this.input = input;
         this.output = output;
         this.status = status;
         this.user = user;
         this.exercise = exercise;
+        this.score = score;
 
         this.createdAt = LocalDateTime.now();
         this.compiledAt = LocalDateTime.now();
@@ -143,5 +147,13 @@ public class Compilation {
 
     public void setExercise(Exercise exercise) {
         this.exercise = exercise;
+    }
+
+    public long getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
     }
 }

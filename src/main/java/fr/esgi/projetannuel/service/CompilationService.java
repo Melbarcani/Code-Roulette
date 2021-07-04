@@ -17,29 +17,29 @@ import java.util.List;
 @AllArgsConstructor
 public class CompilationService {
 
-    private final CompilationRepository repository;
+    private final CompilationRepository compilationRepository;
     private final ExerciseService exerciseService;
 
     public List<Compilation> findAll() {
-        return repository.findAll();
+        return compilationRepository.findAll();
     }
 
     public Compilation findById(String id) {
-        return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("code", id));
+        return compilationRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("code", id));
     }
 
     public Compilation create(String input) {
         var code = new Compilation(input);
-        return repository.save(code);
+        return compilationRepository.save(code);
     }
 
     public Compilation createFullCompilation(Compilation compilation) {
-        return repository.save(compilation);
+        return compilationRepository.save(compilation);
     }
 
     public Compilation createWithOutput(String input, String output, Status status) {
         var code = new Compilation(input, output, status);
-        return repository.save(code);
+        return compilationRepository.save(code);
     }
 
     public Compilation updateOutput(Compilation compilation, String output, Status status) {
@@ -47,12 +47,12 @@ public class CompilationService {
         compilation.setOutput(output);
         compilation.setCompiledAt(LocalDateTime.now());
 
-        return repository.save(compilation);
+        return compilationRepository.save(compilation);
     }
 
     @Transactional
     public void deleteById(String id) {
-        repository.deleteById(id);
+        compilationRepository.deleteById(id);
     }
 
     public String buildCodeToCompile(Exercise userExercise) {

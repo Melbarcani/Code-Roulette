@@ -1,10 +1,7 @@
 package fr.esgi.projetannuel.controller;
 
 import fr.esgi.projetannuel.enumeration.Status;
-import fr.esgi.projetannuel.model.Compilation;
-import fr.esgi.projetannuel.model.CodeResult;
-import fr.esgi.projetannuel.model.Constants;
-import fr.esgi.projetannuel.model.Exercise;
+import fr.esgi.projetannuel.model.*;
 import fr.esgi.projetannuel.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -46,7 +43,7 @@ public class CompilationController {
         String userId = sessionService.getCurrentUser().getId();
         String entireUserCode = compilationService.buildCodeToCompile(userExercise);
         var compilationResult = restService.postCode(entireUserCode, userExercise.getLanguage(), userExercise.getTitle(), userId);
-        long score = scoreService.computeScore(userExercise.getInitialInstructionsCount(), compilationResult.getInstructionsCount()/*, time*/);
+        long score = scoreService.computeScore(userExercise, compilationResult.getInstructionsCount()/*, time*/);
 
         System.out.println(score);
 
@@ -55,7 +52,8 @@ public class CompilationController {
                 compilationResult.getOutputConsole(),
                 compilationResult.getStatus(),
                 sessionService.getCurrentUser(),
-                userExercise
+                userExercise,
+                score
         );
 
         compilationService.createFullCompilation(compilation);
