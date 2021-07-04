@@ -48,6 +48,8 @@ public class CompilationController {
         var compilationResult = restService.postCode(entireUserCode, userExercise.getLanguage(), userExercise.getTitle(), userId);
         long score = scoreService.computeScore(userExercise.getInitialInstructionsCount(), compilationResult.getInstructionsCount()/*, time*/);
 
+        System.out.println(score);
+
         Compilation compilation = new Compilation(
                 entireUserCode,
                 compilationResult.getOutputConsole(),

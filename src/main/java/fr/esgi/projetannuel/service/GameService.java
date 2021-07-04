@@ -15,12 +15,14 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
 public class GameService {
     private final GameRepository gameRepository;
     private final UserRepository userRepository;
+    private final ExerciseService exerciseService;
     private final UserInGameRepository userInGameRepository;
     private final ChatRepository chatRepository;
 
@@ -29,7 +31,10 @@ public class GameService {
     }
 
     public Game findById(String id) {
-        return gameRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Game", id));
+        Game game = gameRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Game", id));
+        game.setExercise(exerciseService.getExerciseToDisplay(game.getExercise().getId()));
+
+        return game;
     }
 
     public List<Game> findByUserId(String userId) {
