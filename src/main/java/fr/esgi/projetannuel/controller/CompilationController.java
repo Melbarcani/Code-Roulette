@@ -2,6 +2,7 @@ package fr.esgi.projetannuel.controller;
 
 import fr.esgi.projetannuel.enumeration.Status;
 import fr.esgi.projetannuel.model.*;
+import fr.esgi.projetannuel.repository.GameRepository;
 import fr.esgi.projetannuel.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,8 @@ import java.util.StringTokenizer;
 @RequiredArgsConstructor
 public class CompilationController {
     private final CompilationService compilationService;
+    private final GameService gameService;
+    private final GameRepository gameRepository;
     private final RestService restService;
     private final ExerciseService exerciseService;
     private final SessionService sessionService;
@@ -39,6 +42,34 @@ public class CompilationController {
     }
 
     @PostMapping("/compileAndSave")
+    public ResponseEntity<Compilation> compileAndSave(@RequestBody Game game /*, long spentTime*/){
+        Exercise userExercise = game.getExercise();
+        String userId = sessionService.getCurrentUser().getId();
+        String entireUserCode = compilationService.buildCodeToCompile(userExercise);
+
+        var compilationResult = restService.postCode(entireUserCode, userExercise.getLanguage(), userExercise.getTitle(), userId);
+        long score = scoreService.computeScore(userExercise, compilationResult.getInstructionsCount()/*, time*/);
+
+        System.out.println(score);
+
+        Compilation compilation = new Compilation(
+                entireUserCode,
+                compilationResult.getOutputConsole(),
+                compilationResult.getStatus(),
+                sessionService.getCurrentUser(),
+                userExercise,
+                score
+        );
+
+        compilationService.createFullCompilation(compilation);
+
+        game.getCompilations().add(compilation);
+        gameRepository.save(game);
+
+        return new ResponseEntity<>(compilation, HttpStatus.OK);
+    }
+
+    @PostMapping("/compileAndSaveExercise")
     public ResponseEntity<Compilation> compileAndSave(@RequestBody Exercise userExercise/*, long spentTime*/){
         String userId = sessionService.getCurrentUser().getId();
         String entireUserCode = compilationService.buildCodeToCompile(userExercise);

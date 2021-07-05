@@ -1,5 +1,6 @@
 package fr.esgi.projetannuel.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import fr.esgi.projetannuel.enumeration.Status;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -42,6 +43,7 @@ public class Compilation {
     private LocalDateTime updatedAt;
 
     @Column(nullable = true)
+    // @JsonFormat(pattern="dd-MM-yyyy hh:mm:ss")
     private LocalDateTime compiledAt;
 
     @Column(nullable = true)
