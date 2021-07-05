@@ -26,6 +26,9 @@ public class Game {
     @OneToMany
     private List<UserInGame> usersInGame = new ArrayList<>();
 
+    @OneToMany
+    private List<Compilation> compilations = new ArrayList<>();
+
     @Column
     boolean isGameOver = false;
 
@@ -34,6 +37,12 @@ public class Game {
     public Game(String id, Exercise exercise) {
         this.id = id;
         this.exercise = exercise;
+    }
+
+    public Game(String id, List<Compilation> compilations) {
+        this.id = id;
+        this.exercise = exercise;
+        this.compilations = compilations;
     }
 
     public String getId() {
@@ -74,5 +83,13 @@ public class Game {
 
     public void setGameOver(boolean gameOver) {
         isGameOver = gameOver;
+    }
+
+    public List<Compilation> getCompilations() {
+        return compilations;
+    }
+
+    public void setCompilations(List<Compilation> compilations) {
+        this.compilations = compilations;
     }
 }
