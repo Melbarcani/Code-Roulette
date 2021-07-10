@@ -54,6 +54,7 @@ public class GameService {
     public Game create(Game game) {
         List<UserInGame> usersInGameSaved = new ArrayList<>();
 
+        // Retire users from Queue
         for(UserInGame userInGame: game.getUsersInGame()) {
             User user = userInGame.getUser();
             user.setInQueue(false);
@@ -63,13 +64,10 @@ public class GameService {
         }
 
         // randomly pick a UserIg for turn 1
-        Random rand = new Random();
-        int randomIndex = rand.nextInt(usersInGameSaved.size());
+        int randomIndex = new Random().nextInt(usersInGameSaved.size());
         UserInGame firstUserInGameToPlay = usersInGameSaved.get(randomIndex);
 
-        firstUserInGameToPlay.setTurn(1);
         firstUserInGameToPlay.setCurrent(true);
-
         usersInGameSaved.set(randomIndex, userInGameRepository.save(firstUserInGameToPlay));
 
         game.setUsersInGame(usersInGameSaved);
@@ -78,39 +76,54 @@ public class GameService {
     }
 
     public Game endTurn(Game game) {
+        // increase turn of current + set current to false
         for (UserInGame userIg: game.getUsersInGame()) {
-            if (userIg.getTurn() > game.getNumberOfTurn()) {
-                game.setGameOver(true);
+            if(userIg.isCurrent()) {
+                userIg.incrementTurn();
+                userIg.setCurrent(false);
 
-                UserInGame userScoreMax = game.getUsersInGame().get(0);
-
-                for (UserInGame userInGameEnded: game.getUsersInGame()) {
-                    if (userInGameEnded.getScore() > userScoreMax.getScore()) {
-                        userScoreMax = userInGameEnded;
-                    }
-                }
-
-                // TODO Baisser l'elo des autres joueurs
-
-                userScoreMax.getUser().setElo(userScoreMax.getUser().getElo() + 15);
-                userRepository.save(userScoreMax.getUser());
-
-                return gameRepository.save(game);
+                userInGameRepository.save(userIg);
             }
+
         }
 
+        // get User with the min(turn)
         UserInGame userTurnMin = game.getUsersInGame().get(0);
-
         for (UserInGame userIg: game.getUsersInGame()) {
-            userIg.setCurrent(false);
-            userInGameRepository.save(userIg);
             if (userIg.getTurn() < userTurnMin.getTurn()) {
                 userTurnMin = userIg;
             }
         }
 
-        // Next player is : userTurnMin
-        userTurnMin.setTurn(userTurnMin.getTurn() + 1);
+        // Check if game is over
+        if(userTurnMin.getTurn() >= game.getNumberOfTurn()) {
+            game.setGameOver(true);
+
+            UserInGame userScoreMax = game.getUsersInGame().get(0);
+
+            // get user with max(score)
+            for (UserInGame userInGameEnded: game.getUsersInGame()) {
+                if (userInGameEnded.getScore() > userScoreMax.getScore()) {
+                    userScoreMax = userInGameEnded;
+                }
+            }
+
+            for (UserInGame userInGameEnded: game.getUsersInGame()) {
+                if (!userInGameEnded.equals(userScoreMax)) {
+                    userInGameEnded.getUser().decreaseElo(15);
+                    userRepository.save(userInGameEnded.getUser());
+                }
+            }
+
+            userScoreMax.getUser().increaseElo(15);
+            userScoreMax.setUser(userRepository.save(userScoreMax.getUser()));
+            userScoreMax.setWon(true);
+            userInGameRepository.save(userScoreMax);
+
+            return gameRepository.save(game);
+        }
+
+        // set next player to userTurnMin
         userTurnMin.setCurrent(true);
         userInGameRepository.save(userTurnMin);
 

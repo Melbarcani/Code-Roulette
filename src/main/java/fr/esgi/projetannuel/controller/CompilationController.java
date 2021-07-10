@@ -1,5 +1,7 @@
 package fr.esgi.projetannuel.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import fr.esgi.projetannuel.enumeration.Status;
 import fr.esgi.projetannuel.model.*;
 import fr.esgi.projetannuel.repository.GameRepository;
@@ -11,10 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.StringTokenizer;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/code")
@@ -46,8 +45,8 @@ public class CompilationController {
         return new ResponseEntity<>(compilationService.create(input), HttpStatus.CREATED);
     }
 
-    @PostMapping("/compileAndSave")
-    public ResponseEntity<Compilation> compileAndSave(@RequestBody Game game /*, long spentTime*/){
+    @PostMapping("/compileAndSave/{timer}")
+    public ResponseEntity<Compilation> compileAndSave(@PathVariable Long timer, @RequestBody Game game) { //@RequestBody Game game, Long timer){
         Exercise userExercise = game.getExercise();
         String userId = sessionService.getCurrentUser().getId();
         String entireUserCode = compilationService.buildCodeToCompile(userExercise);
@@ -66,6 +65,7 @@ public class CompilationController {
 
         compilationService.createFullCompilation(compilation);
 
+        // game.setCode(compilation.getInput());
         game.getCompilations().add(compilation);
         gameRepository.save(game);
 

@@ -17,6 +17,18 @@ public class Game {
     @Column(updatable = false, nullable = false)
     private String id;
 
+    @Column(columnDefinition="text", nullable = true)
+    private String code = "";
+
+    @Column
+    boolean isGameOver = false;
+
+    @Column
+    int numberOfTurn = 3;
+
+    @Column
+    int timer = 25;
+
     @OneToOne
     private Exercise exercise;
 
@@ -28,12 +40,6 @@ public class Game {
 
     @OneToMany
     private List<Compilation> compilations = new ArrayList<>();
-
-    @Column
-    boolean isGameOver = false;
-
-    @Column
-    int numberOfTurn = 3;
 
     public Game() {}
 
@@ -101,5 +107,21 @@ public class Game {
 
     public void setNumberOfTurn(int numberOfTurn) {
         this.numberOfTurn = numberOfTurn;
+    }
+
+    public int getTimer() {
+        return timer;
+    }
+
+    public void setTimer(int timer) {
+        this.timer = timer;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 }

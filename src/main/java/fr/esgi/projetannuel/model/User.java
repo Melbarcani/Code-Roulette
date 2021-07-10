@@ -135,8 +135,12 @@ public class User {
         this.elo = elo;
     }
 
-    public void setElo(Integer elo) {
-        this.elo = elo;
+    public void increaseElo(Integer elo) {
+        this.elo = this.elo + elo;
+    }
+
+    public void decreaseElo(Integer elo) {
+        this.elo = this.elo - elo;
     }
 
     public Integer getEloProblems() {
