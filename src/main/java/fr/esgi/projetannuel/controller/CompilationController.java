@@ -77,7 +77,7 @@ public class CompilationController {
         String userId = sessionService.getCurrentUser().getId();
         String entireUserCode = compilationService.buildCodeToCompile(userExercise);
         var compilationResult = restService.postCode(entireUserCode, userExercise.getLanguage(), userExercise.getTitle(), userId);
-        long score = scoreService.computeScore(userExercise, compilationResult.getInstructionsCount()/*, time*/);
+        long score = scoreService.computeScore(userExercise, compilationResult.getInstructionsCount(), 0);
 
         System.out.println(score);
 
@@ -95,7 +95,7 @@ public class CompilationController {
         return new ResponseEntity<>(compilation, HttpStatus.OK);
     }
 
-    @PostMapping("/compile")
+/*    @PostMapping("/compile")
     public ResponseEntity<Compilation> saveCompiledCode(@RequestBody String input){
         var restTemplate = new RestTemplate();
 
@@ -136,5 +136,5 @@ public class CompilationController {
     public ResponseEntity<?> delete(@PathVariable String id) {
         compilationService.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
+    }*/
 }
