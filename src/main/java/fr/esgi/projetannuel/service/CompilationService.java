@@ -19,6 +19,7 @@ public class CompilationService {
 
     private final CompilationRepository compilationRepository;
     private final ExerciseService exerciseService;
+    private final UserService userService;
 
     public List<Compilation> findAll() {
         return compilationRepository.findAll();
@@ -34,6 +35,7 @@ public class CompilationService {
     }
 
     public Compilation createFullCompilation(Compilation compilation) {
+        userService.updateCompilationCompleted();
         return compilationRepository.save(compilation);
     }
 

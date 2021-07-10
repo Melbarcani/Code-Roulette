@@ -48,9 +48,7 @@ public class CompilationController {
         String entireUserCode = compilationService.buildCodeToCompile(userExercise);
 
         var compilationResult = restService.postCode(entireUserCode, userExercise.getLanguage(), userExercise.getTitle(), userId);
-        long score = scoreService.computeScore(userExercise, compilationResult.getInstructionsCount()/*, time*/);
-
-        System.out.println(score);
+        long score = scoreService.computeScore(userExercise, compilationResult.getInstructionsCount(), 10);
 
         Compilation compilation = new Compilation(
                 entireUserCode,
@@ -69,12 +67,12 @@ public class CompilationController {
         return new ResponseEntity<>(compilation, HttpStatus.OK);
     }
 
-    @PostMapping("/compileAndSaveExercise")
-    public ResponseEntity<Compilation> compileAndSave(@RequestBody Exercise userExercise/*, long spentTime*/){
+   /* @PostMapping("/compileAndSaveExercise")
+    public ResponseEntity<Compilation> compileAndSave(@RequestBody Exercise userExercise*//*, long spentTime*//*){
         String userId = sessionService.getCurrentUser().getId();
         String entireUserCode = compilationService.buildCodeToCompile(userExercise);
         var compilationResult = restService.postCode(entireUserCode, userExercise.getLanguage(), userExercise.getTitle(), userId);
-        long score = scoreService.computeScore(userExercise, compilationResult.getInstructionsCount()/*, time*/);
+        long score = scoreService.computeScore(userExercise, compilationResult.getInstructionsCount()*//*, time*//*);
 
         System.out.println(score);
 
@@ -133,5 +131,5 @@ public class CompilationController {
     public ResponseEntity<?> delete(@PathVariable String id) {
         compilationService.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
+    }*/
 }

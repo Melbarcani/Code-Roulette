@@ -88,4 +88,16 @@ public class UserService {
                 .filter(User::getInQueue)
                 .count();
     }
+
+    public User updateUser(User user) {
+        var updatedUser = userRepository.findById(user.getId()).orElseThrow(() -> {throw new ResourceNotFoundException("update email", user.getId());});
+        updatedUser = user;
+        return userRepository.save(updatedUser);
+    }
+
+    public void updateCompilationCompleted() {
+        User user = sessionService.getCurrentUser();
+        user.setCompilationCompleted(user.getCompilationCompleted()+1);
+        userRepository.save(user);
+    }
 }

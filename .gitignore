@@ -152,5 +152,6 @@ buildNumber.properties
 
 # Ignore prod properties
 src/main/resources/application-prod.properties
+src/main/resources/application-dev.properties
 
 # End of https://www.toptal.com/developers/gitignore/api/maven,intellij

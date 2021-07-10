@@ -66,4 +66,9 @@ public class UserController {
         return new ResponseEntity<>(userService.usersInQueue(), HttpStatus.OK);
     }
 
+    @PostMapping("/updateUser")
+    public ResponseEntity<User> updateEmail(@RequestBody User user){
+        return ResponseEntity.ok(userService.updateUser(user));
+    }
+
 }
