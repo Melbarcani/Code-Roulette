@@ -32,6 +32,9 @@ public class Game {
     @Column
     boolean isGameOver = false;
 
+    @Column
+    int numberOfTurn = 3;
+
     public Game() {}
 
     public Game(String id, Exercise exercise) {
@@ -41,7 +44,6 @@ public class Game {
 
     public Game(String id, List<Compilation> compilations) {
         this.id = id;
-        this.exercise = exercise;
         this.compilations = compilations;
     }
 
@@ -81,8 +83,8 @@ public class Game {
         return isGameOver;
     }
 
-    public void setGameOver(boolean gameOver) {
-        isGameOver = gameOver;
+    public void setGameOver(boolean isGameOver) {
+        this.isGameOver = isGameOver;
     }
 
     public List<Compilation> getCompilations() {
@@ -91,5 +93,13 @@ public class Game {
 
     public void setCompilations(List<Compilation> compilations) {
         this.compilations = compilations;
+    }
+
+    public int getNumberOfTurn() {
+        return numberOfTurn;
+    }
+
+    public void setNumberOfTurn(int numberOfTurn) {
+        this.numberOfTurn = numberOfTurn;
     }
 }

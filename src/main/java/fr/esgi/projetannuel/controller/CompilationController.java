@@ -3,6 +3,7 @@ package fr.esgi.projetannuel.controller;
 import fr.esgi.projetannuel.enumeration.Status;
 import fr.esgi.projetannuel.model.*;
 import fr.esgi.projetannuel.repository.GameRepository;
+import fr.esgi.projetannuel.repository.UserInGameRepository;
 import fr.esgi.projetannuel.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -12,6 +13,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.StringTokenizer;
 
 @RestController
@@ -25,6 +27,9 @@ public class CompilationController {
     private final ExerciseService exerciseService;
     private final SessionService sessionService;
     private final ScoreService scoreService;
+    private final UserInGameService userInGameService;
+    private final UserInGameRepository userInGameRepository;
+
 
     @GetMapping
     public ResponseEntity<List<Compilation>> findAll(){
@@ -49,8 +54,6 @@ public class CompilationController {
 
         var compilationResult = restService.postCode(entireUserCode, userExercise.getLanguage(), userExercise.getTitle(), userId);
         long score = scoreService.computeScore(userExercise, compilationResult.getInstructionsCount()/*, time*/);
-
-        System.out.println(score);
 
         Compilation compilation = new Compilation(
                 entireUserCode,

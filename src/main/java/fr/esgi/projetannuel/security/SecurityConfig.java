@@ -65,18 +65,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
+
         registry.addMapping("/**")
-                .allowedMethods("GET", "POST", "PUT", "DELETE")
                 .allowedOrigins("*")
-                .allowedHeaders("*");
+                .allowedMethods("GET", "POST", "PUT", "DELETE")
+                .allowedHeaders("*")
+                .exposedHeaders("Authorization")
+                .allowCredentials(false).maxAge(3600);
     }
-
-/*    @Bean
-    public ObjectMapper jsonObjectMapper() {
-        final ObjectMapper jsonMapper = new ObjectMapper();
-        jsonMapper.registerModule(new JavaTimeModule());
-        jsonMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-
-        return jsonMapper;
-    }*/
 }

@@ -15,6 +15,15 @@ public class UserInGame {
     @Column(name = "userInGame_id", updatable = false, nullable = false)
     private String id;
 
+    @Column
+    private int turn = 0;
+
+    @Column
+    private long score = 0;
+
+    @Column
+    private boolean isCurrent = false;
+
     @OneToOne
     private User user;
 
@@ -39,5 +48,29 @@ public class UserInGame {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public int getTurn() {
+        return turn;
+    }
+
+    public void setTurn(int turn) {
+        this.turn = turn;
+    }
+
+    public boolean isCurrent() {
+        return isCurrent;
+    }
+
+    public void setCurrent(boolean current) {
+        isCurrent = current;
+    }
+
+    public long getScore() {
+        return score;
+    }
+
+    public void setScore(long score) {
+        this.score = score;
     }
 }

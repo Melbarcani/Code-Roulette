@@ -29,6 +29,8 @@ public class JWTFilter extends GenericFilterBean {
         String jwt = resolveToken(request);
 
         response.addHeader("Access-Control-Expose-Headers", "Authorization");
+        // response.addHeader("Access-Control-Expose-Headers", "Authorization");
+
 
         if(hasText(jwt) && this.tokenProvider.validateToken(jwt)) {
             var authentication = this.tokenProvider.getAuthentication(jwt);

@@ -43,4 +43,9 @@ public class GameController {
         gameService.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @PostMapping("/endTurn")
+    public ResponseEntity<Game> endTurn(@RequestBody Game game){
+        return new ResponseEntity<>(gameService.endTurn(game), HttpStatus.CREATED);
+    }
 }
