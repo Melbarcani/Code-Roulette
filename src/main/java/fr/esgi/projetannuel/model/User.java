@@ -39,6 +39,15 @@ public class User {
     private Integer elo = 1000;
 
     @Column(nullable = false)
+    private Integer gamesPlayed = 0;
+
+    @Column(nullable = false)
+    private Integer gamesWon = 0;
+
+    @Column(nullable = false)
+    private Integer compilationCompleted = 0;
+
+    @Column(nullable = false)
     private Integer eloProblems = 1000;
 
     @Column(nullable = false)
@@ -165,5 +174,29 @@ public class User {
 
     public void setLobbyId(String lobbyId) {
         this.lobbyId = lobbyId;
+    }
+
+    public Integer getGamesPlayed() {
+        return gamesPlayed;
+    }
+
+    public void setGamesPlayed(Integer gamesPlayed) {
+        this.gamesPlayed = gamesPlayed;
+    }
+
+    public Integer getGamesWon() {
+        return gamesWon;
+    }
+
+    public void setGamesWon(Integer gamesWon) {
+        this.gamesWon = gamesWon;
+    }
+
+    public Integer getCompilationCompleted() {
+        return compilationCompleted;
+    }
+
+    public void setCompilationCompleted(Integer compilationCompleted) {
+        this.compilationCompleted = compilationCompleted;
     }
 }

@@ -152,5 +152,9 @@ buildNumber.properties
 
 # Ignore prod properties
 src/main/resources/application-prod.properties
+src/main/resources/application-dev.properties
+
+# for Mac
+.DS_Store
 
 # End of https://www.toptal.com/developers/gitignore/api/maven,intellij

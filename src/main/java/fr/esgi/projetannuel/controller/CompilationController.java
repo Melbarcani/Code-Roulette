@@ -52,7 +52,7 @@ public class CompilationController {
         String entireUserCode = compilationService.buildCodeToCompile(userExercise);
 
         var compilationResult = restService.postCode(entireUserCode, userExercise.getLanguage(), userExercise.getTitle(), userId);
-        long score = scoreService.computeScore(userExercise, compilationResult.getInstructionsCount()/*, time*/);
+        long score = scoreService.computeScore(userExercise, compilationResult.getInstructionsCount(), (game.getTimer() - timer));
 
         Compilation compilation = new Compilation(
                 entireUserCode,
