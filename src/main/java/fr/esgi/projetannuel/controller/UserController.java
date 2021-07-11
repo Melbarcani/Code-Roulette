@@ -1,5 +1,6 @@
 package fr.esgi.projetannuel.controller;
 
+import fr.esgi.projetannuel.model.Dto.UserDto;
 import fr.esgi.projetannuel.model.User;
 import fr.esgi.projetannuel.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -67,8 +68,8 @@ public class UserController {
     }
 
     @PostMapping("/updateUser")
-    public ResponseEntity<User> updateEmail(@RequestBody User user){
-        return ResponseEntity.ok(userService.updateUser(user));
+    public ResponseEntity<User> updateEmail(@RequestBody UserDto userDto){
+        return ResponseEntity.ok(userService.updateUser(userDto));
     }
 
 }
