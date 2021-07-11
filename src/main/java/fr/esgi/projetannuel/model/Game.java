@@ -1,10 +1,13 @@
 package fr.esgi.projetannuel.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Entity
 public class Game {
@@ -40,6 +43,10 @@ public class Game {
 
     @OneToMany
     private List<Compilation> compilations = new ArrayList<>();
+
+    // @JsonIgnore
+    @ElementCollection
+    private Map<Integer, String> turnOrder = new HashMap<>();
 
     public Game() {}
 
@@ -123,5 +130,13 @@ public class Game {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public Map<Integer, String> getTurnOrder() {
+        return turnOrder;
+    }
+
+    public void setTurnOrder(Map<Integer, String> turnOrder) {
+        this.turnOrder = turnOrder;
     }
 }

@@ -1,10 +1,7 @@
 package fr.esgi.projetannuel.service;
 
 import fr.esgi.projetannuel.exception.ResourceNotFoundException;
-import fr.esgi.projetannuel.model.Chat;
-import fr.esgi.projetannuel.model.Game;
-import fr.esgi.projetannuel.model.User;
-import fr.esgi.projetannuel.model.UserInGame;
+import fr.esgi.projetannuel.model.*;
 import fr.esgi.projetannuel.repository.ChatRepository;
 import fr.esgi.projetannuel.repository.GameRepository;
 import fr.esgi.projetannuel.repository.UserInGameRepository;
@@ -13,9 +10,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -64,8 +60,22 @@ public class GameService {
         }
 
         // randomly pick a UserIg for turn 1
-        int randomIndex = new Random().nextInt(usersInGameSaved.size());
+        Random rand = new Random();
+        int randomIndex = rand.nextInt(usersInGameSaved.size());
         UserInGame firstUserInGameToPlay = usersInGameSaved.get(randomIndex);
+
+        // remove first UserInGame to play and shuffle the collection
+        List<UserInGame> usersInGameShuffle = new ArrayList<>(usersInGameSaved);
+        usersInGameShuffle.remove(firstUserInGameToPlay);
+        Collections.shuffle(usersInGameShuffle, rand);
+
+        // populate hashmap with first player and other players
+        int order = 1;
+        game.getTurnOrder().put(order, firstUserInGameToPlay.getId());
+        for(UserInGame userIgRandom: usersInGameShuffle) {
+            order++;
+            game.getTurnOrder().put(order, userIgRandom.getId());
+        }
 
         firstUserInGameToPlay.setCurrent(true);
         usersInGameSaved.set(randomIndex, userInGameRepository.save(firstUserInGameToPlay));
@@ -76,27 +86,36 @@ public class GameService {
     }
 
     public Game endTurn(Game game) {
-        // increase turn of current + set current to false
-        for (UserInGame userIg: game.getUsersInGame()) {
-            if(userIg.isCurrent()) {
-                userIg.incrementTurn();
-                userIg.setCurrent(false);
+        // get current UserInGame
+         UserInGame lastUserIgPlayed = game.getUsersInGame()
+                .stream()
+                .filter(UserInGame::isCurrent)
+                .findFirst().orElseThrow(() -> new ResourceNotFoundException("lastUserIgPlayed - Game's current User not found !", game.getId()));
 
-                userInGameRepository.save(userIg);
-            }
+        // increment turn + set current to false of UserInGame
+        lastUserIgPlayed.incrementTurn();
+        lastUserIgPlayed.setCurrent(false);
+        lastUserIgPlayed = userInGameRepository.save(lastUserIgPlayed);
 
+        // get key of last current User for turn order
+        Integer key = getKeyByValue(game.getTurnOrder(), lastUserIgPlayed.getId());
+
+        // if last reset or just increment
+        if(key == null || key >= game.getUsersInGame().size()) {
+            key = 0;
         }
+        key++;
 
-        // get User with the min(turn)
-        UserInGame userTurnMin = game.getUsersInGame().get(0);
-        for (UserInGame userIg: game.getUsersInGame()) {
-            if (userIg.getTurn() < userTurnMin.getTurn()) {
-                userTurnMin = userIg;
-            }
-        }
+        // get next User with key
+        Integer finalKey = key;
+        UserInGame nextUserToPlay = game.getUsersInGame()
+                .stream()
+                .filter(userInGame -> userInGame.getId().equals(game.getTurnOrder().get(finalKey)))
+                .findFirst().orElseThrow(() -> new ResourceNotFoundException("nextUserToPlay - Game's current User not found !", game.getId()));
+
 
         // Check if game is over
-        if(userTurnMin.getTurn() >= game.getNumberOfTurn()) {
+        if(nextUserToPlay.getTurn() >= game.getNumberOfTurn()) {
             game.setGameOver(true);
 
             UserInGame userScoreMax = game.getUsersInGame().get(0);
@@ -123,9 +142,9 @@ public class GameService {
             return gameRepository.save(game);
         }
 
-        // set next player to userTurnMin
-        userTurnMin.setCurrent(true);
-        userInGameRepository.save(userTurnMin);
+        // set next player to nextUserToPlay
+        nextUserToPlay.setCurrent(true);
+        userInGameRepository.save(nextUserToPlay);
 
         return game;
     }
@@ -133,5 +152,14 @@ public class GameService {
     @Transactional
     public void deleteById(String id) {
         gameRepository.deleteById(id);
+    }
+
+    public static <T, E> T getKeyByValue(Map<T, E> map, E value) {
+        for (Map.Entry<T, E> entry : map.entrySet()) {
+            if (Objects.equals(value, entry.getValue())) {
+                return entry.getKey();
+            }
+        }
+        return null;
     }
 }
