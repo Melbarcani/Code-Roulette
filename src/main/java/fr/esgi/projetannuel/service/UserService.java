@@ -1,7 +1,9 @@
 package fr.esgi.projetannuel.service;
 
 import fr.esgi.projetannuel.exception.ResourceNotFoundException;
+import fr.esgi.projetannuel.mapper.UserMapper;
 import fr.esgi.projetannuel.model.Constants;
+import fr.esgi.projetannuel.model.Dto.UserDto;
 import fr.esgi.projetannuel.model.Session;
 import fr.esgi.projetannuel.model.User;
 import fr.esgi.projetannuel.repository.SessionRepository;
@@ -89,10 +91,11 @@ public class UserService {
                 .count();
     }
 
-    public User updateUser(User user) {
-        var updatedUser = userRepository.findById(user.getId()).orElseThrow(() -> {throw new ResourceNotFoundException("update email", user.getId());});
-        updatedUser = user;
-        return userRepository.save(updatedUser);
+    public User updateUser(UserDto userDto) {
+        User user = userRepository.findById(userDto.id).orElseThrow(() -> new ResourceNotFoundException(Constants.USER, userDto.id));
+        user.updateUserFromDto(userDto, user);
+        
+        return userRepository.save(user);
     }
 
     public void updateCompilationCompleted() {

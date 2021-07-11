@@ -1,13 +1,15 @@
 package fr.esgi.projetannuel.model;
 
 import fr.esgi.projetannuel.enumeration.Role;
+import fr.esgi.projetannuel.mapper.UserMapper;
+import fr.esgi.projetannuel.model.Dto.UserDto;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity(name = "profile")
-public class User {
+public class User implements UserMapper {
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(
@@ -198,5 +200,14 @@ public class User {
 
     public void setCompilationCompleted(Integer compilationCompleted) {
         this.compilationCompleted = compilationCompleted;
+    }
+
+    @Override
+    public void updateUserFromDto(UserDto userDto, User user) {
+        this.firstName = userDto.firstName;
+        this.lastName = userDto.lastName;
+        this.email = userDto.email;
+        this.userName = userDto.userName;
+        this.birthDate = userDto.birthDate;
     }
 }
