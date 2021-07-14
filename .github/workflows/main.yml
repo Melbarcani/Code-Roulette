@@ -40,7 +40,9 @@ jobs:
         with:
           java-version: 11
       - name: Generate the package
-        run: mvn -B package -Dmaven.test.skip=true
+        run: |
+          ls
+          mvn -B package -Dmaven.test.skip=true
       - name: Deploy the package to the remote server
         uses: garygrossgarten/github-action-scp@release
         with:
@@ -54,8 +56,8 @@ jobs:
         uses: garygrossgarten/github-action-ssh@release
         with:
           command: |
-            sudo docker-compose down
-            sudo docker-compose up -d
+            docker-compose down
+            docker-compose up -d
           host: ${{ secrets.HOST }}
           username: ${{ secrets.SSH_USER }}
           privateKey: ${{ secrets.SSH_PRIVATE_KEY}}
