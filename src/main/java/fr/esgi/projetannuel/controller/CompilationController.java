@@ -65,7 +65,10 @@ public class CompilationController {
 
         compilationService.createFullCompilation(compilation);
 
-        // game.setCode(compilation.getInput());
+        compilationService.createFullCompilation(compilation);
+        if(compilationResult.getStatus().equals(Status.SUCCESS)){
+            game.setCode(userExercise.getCode());
+        }
         game.getCompilations().add(compilation);
         gameRepository.save(game);
 
