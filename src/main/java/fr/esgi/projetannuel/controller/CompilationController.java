@@ -46,7 +46,7 @@ public class CompilationController {
     }
 
     @PostMapping("/compileAndSave/{timer}")
-    public ResponseEntity<Compilation> compileAndSave(@PathVariable Long timer, @RequestBody Game game) { //@RequestBody Game game, Long timer){
+    public ResponseEntity<Compilation> compileAndSave(@PathVariable Long timer, @RequestBody Game game) {
         Exercise userExercise = game.getExercise();
         String userId = sessionService.getCurrentUser().getId();
         String entireUserCode = compilationService.buildCodeToCompile(userExercise);
@@ -64,8 +64,9 @@ public class CompilationController {
         );
 
         compilationService.createFullCompilation(compilation);
-
-        // game.setCode(compilation.getInput());
+        if(compilationResult.getStatus().equals(Status.SUCCESS)){
+            game.setCode(userExercise.getCode());
+        }
         game.getCompilations().add(compilation);
         gameRepository.save(game);
 
