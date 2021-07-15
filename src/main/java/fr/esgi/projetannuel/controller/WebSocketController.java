@@ -18,13 +18,11 @@ public class WebSocketController {
     private final MessageService messageService;
     private final ChatService chatService;
     private final UserService userService;
-    private final GameService gameService;
 
-    public WebSocketController(UserService userService, ChatService chatService, MessageService messageService, GameService gameService) {
+    public WebSocketController(UserService userService, ChatService chatService, MessageService messageService) {
         this.userService = userService;
         this.chatService = chatService;
         this.messageService = messageService;
-        this.gameService = gameService;
     }
 
     @MessageMapping("/socket/sendMessage")

@@ -132,10 +132,12 @@ public class GameService {
             for (UserInGame userInGameEnded: game.getUsersInGame()) {
                 if (!userInGameEnded.equals(userScoreMax)) {
                     userInGameEnded.getUser().decreaseElo(15);
-                    userRepository.save(userInGameEnded.getUser());
                 }
+                userInGameEnded.getUser().increaseGamePlayed();
+                userRepository.save(userInGameEnded.getUser());
             }
 
+            userScoreMax.getUser().increaseGameWon();
             userScoreMax.getUser().increaseElo(15);
             userScoreMax.setUser(userRepository.save(userScoreMax.getUser()));
             userScoreMax.setWon(true);
