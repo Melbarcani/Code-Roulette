@@ -51,4 +51,10 @@ public class WebSocketController {
     public int updateGame(@DestinationVariable String gameId) {
         return 0;
     }
+
+    @MessageMapping("/socket/updateLobby/{lobbyId}")
+    @SendTo("/socket/lobby/update/{lobbyId}")
+    public int updateLobby(@DestinationVariable String lobbyId) {
+        return 0;
+    }
 }

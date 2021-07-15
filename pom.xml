@@ -117,7 +117,7 @@
         <profile>
             <id>prod</id>
             <activation>
-                <activeByDefault>false</activeByDefault>
+                <activeByDefault>true</activeByDefault>
             </activation>
             <properties>
                 <activatedProperties>prod</activatedProperties>
@@ -126,7 +126,7 @@
         <profile>
             <id>dev</id>
             <activation>
-                <activeByDefault>true</activeByDefault>
+                <activeByDefault>false</activeByDefault>
             </activation>
             <properties>
                 <activatedProperties>dev</activatedProperties>
