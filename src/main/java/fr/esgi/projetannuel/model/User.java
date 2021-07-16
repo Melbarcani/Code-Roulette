@@ -186,12 +186,20 @@ public class User implements UserMapper {
         this.gamesPlayed = gamesPlayed;
     }
 
+    public void increaseGamePlayed() {
+        this.gamesPlayed++;
+    }
+
     public Integer getGamesWon() {
         return gamesWon;
     }
 
     public void setGamesWon(Integer gamesWon) {
         this.gamesWon = gamesWon;
+    }
+
+    public void increaseGameWon() {
+        this.gamesWon++;
     }
 
     public Integer getCompilationCompleted() {

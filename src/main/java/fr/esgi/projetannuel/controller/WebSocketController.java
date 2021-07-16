@@ -18,13 +18,11 @@ public class WebSocketController {
     private final MessageService messageService;
     private final ChatService chatService;
     private final UserService userService;
-    private final GameService gameService;
 
-    public WebSocketController(UserService userService, ChatService chatService, MessageService messageService, GameService gameService) {
+    public WebSocketController(UserService userService, ChatService chatService, MessageService messageService) {
         this.userService = userService;
         this.chatService = chatService;
         this.messageService = messageService;
-        this.gameService = gameService;
     }
 
     @MessageMapping("/socket/sendMessage")
@@ -49,6 +47,12 @@ public class WebSocketController {
     @MessageMapping("/socket/endTurn/{gameId}")
     @SendTo("/socket/game/update/{gameId}")
     public int updateGame(@DestinationVariable String gameId) {
+        return 0;
+    }
+
+    @MessageMapping("/socket/updateLobby/{lobbyId}")
+    @SendTo("/socket/lobby/update/{lobbyId}")
+    public int updateLobby(@DestinationVariable String lobbyId) {
         return 0;
     }
 }

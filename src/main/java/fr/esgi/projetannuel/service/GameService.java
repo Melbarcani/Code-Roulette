@@ -1,7 +1,10 @@
 package fr.esgi.projetannuel.service;
 
 import fr.esgi.projetannuel.exception.ResourceNotFoundException;
-import fr.esgi.projetannuel.model.*;
+import fr.esgi.projetannuel.model.Chat;
+import fr.esgi.projetannuel.model.Game;
+import fr.esgi.projetannuel.model.User;
+import fr.esgi.projetannuel.model.UserInGame;
 import fr.esgi.projetannuel.repository.ChatRepository;
 import fr.esgi.projetannuel.repository.GameRepository;
 import fr.esgi.projetannuel.repository.UserInGameRepository;
@@ -11,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -130,10 +132,12 @@ public class GameService {
             for (UserInGame userInGameEnded: game.getUsersInGame()) {
                 if (!userInGameEnded.equals(userScoreMax)) {
                     userInGameEnded.getUser().decreaseElo(15);
-                    userRepository.save(userInGameEnded.getUser());
                 }
+                userInGameEnded.getUser().increaseGamePlayed();
+                userRepository.save(userInGameEnded.getUser());
             }
 
+            userScoreMax.getUser().increaseGameWon();
             userScoreMax.getUser().increaseElo(15);
             userScoreMax.setUser(userRepository.save(userScoreMax.getUser()));
             userScoreMax.setWon(true);
