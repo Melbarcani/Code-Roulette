@@ -1,9 +1,9 @@
 package fr.esgi.projetannuel.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -43,6 +43,9 @@ public class Game {
 
     @OneToMany
     private List<Compilation> compilations = new ArrayList<>();
+
+    @Column(nullable = true)
+    private LocalDateTime createdAt = LocalDateTime.now();
 
     // @JsonIgnore
     @ElementCollection
@@ -138,5 +141,13 @@ public class Game {
 
     public void setTurnOrder(Map<Integer, String> turnOrder) {
         this.turnOrder = turnOrder;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 }
