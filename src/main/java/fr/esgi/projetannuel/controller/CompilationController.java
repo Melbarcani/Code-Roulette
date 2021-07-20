@@ -1,9 +1,10 @@
 package fr.esgi.projetannuel.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import fr.esgi.projetannuel.enumeration.Status;
-import fr.esgi.projetannuel.model.*;
+import fr.esgi.projetannuel.model.Compilation;
+import fr.esgi.projetannuel.model.Exercise;
+import fr.esgi.projetannuel.model.Game;
+import fr.esgi.projetannuel.model.NewCode;
 import fr.esgi.projetannuel.repository.GameRepository;
 import fr.esgi.projetannuel.repository.UserInGameRepository;
 import fr.esgi.projetannuel.service.*;
@@ -11,9 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
-import java.util.*;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/code")
@@ -31,17 +31,17 @@ public class CompilationController {
 
 
     @GetMapping
-    public ResponseEntity<List<Compilation>> findAll(){
+    public ResponseEntity<List<Compilation>> findAll() {
         return new ResponseEntity<>(compilationService.findAll(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Compilation> findById(@PathVariable String id){
+    public ResponseEntity<Compilation> findById(@PathVariable String id) {
         return new ResponseEntity<>(compilationService.findById(id), HttpStatus.OK);
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Compilation> save(@RequestBody String input){
+    public ResponseEntity<Compilation> save(@RequestBody String input) {
         return new ResponseEntity<>(compilationService.create(input), HttpStatus.CREATED);
     }
 
@@ -64,7 +64,7 @@ public class CompilationController {
         );
 
         compilationService.createFullCompilation(compilation);
-        if(compilationResult.getStatus().equals(Status.SUCCESS)){
+        if (compilationResult.getStatus().equals(Status.SUCCESS)) {
             game.setCode(userExercise.getCode());
         }
         game.getCompilations().add(compilation);
@@ -73,8 +73,20 @@ public class CompilationController {
         return new ResponseEntity<>(compilation, HttpStatus.OK);
     }
 
+    @PostMapping("/compileNewCode")
+    public ResponseEntity<NewCode> compileNewCode(@RequestBody NewCode newCode) {
+        CodeBuilder codeBuilder = new CodeBuilder(newCode);
+
+        String userId = sessionService.getCurrentUser().getId();
+        var compilationResult = restService.postCode(codeBuilder.execute(), newCode.getLanguage(), newCode.getTitle(), userId);
+        newCode.setStatus(compilationResult.getStatus().toString());
+        newCode.setCompilationOutput(compilationResult.getOutputConsole());
+        newCode.setCompilationScore(compilationResult.getInstructionsCount());
+        return new ResponseEntity<>(newCode, HttpStatus.OK);
+    }
+
     @PostMapping("/compileAndSaveExercise")
-    public ResponseEntity<Compilation> compileAndSave(@RequestBody Exercise userExercise/*, long spentTime*/){
+    public ResponseEntity<Compilation> compileAndSave(@RequestBody Exercise userExercise/*, long spentTime*/) {
         String userId = sessionService.getCurrentUser().getId();
         String entireUserCode = compilationService.buildCodeToCompile(userExercise);
         var compilationResult = restService.postCode(entireUserCode, userExercise.getLanguage(), userExercise.getTitle(), userId);

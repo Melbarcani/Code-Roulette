@@ -1,6 +1,8 @@
 package fr.esgi.projetannuel.controller;
 
 import fr.esgi.projetannuel.model.Exercise;
+import fr.esgi.projetannuel.model.NewCode;
+import fr.esgi.projetannuel.service.CodeBuilder;
 import fr.esgi.projetannuel.service.ExerciseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -27,9 +29,17 @@ public class ExerciseController
         return new ResponseEntity<>(exerciseService.getExerciseToDisplay(id), HttpStatus.OK);
     }
 
-    @PostMapping("/")
+    /*@PostMapping("/")
     public ResponseEntity<Exercise> save(@RequestBody Exercise exercise){
         return new ResponseEntity<>(exerciseService.create(exercise), HttpStatus.CREATED);
+    }*/
+
+    @PostMapping("/save")
+    public ResponseEntity<NewCode> save(@RequestBody NewCode newCode){
+        CodeBuilder codeBuilder = new CodeBuilder(newCode);
+        var exercise = new Exercise(newCode.getTitle(), codeBuilder.execute(), newCode.getDescription(), newCode.getLanguage());
+        exerciseService.create(exercise);
+        return new ResponseEntity<>(newCode, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
