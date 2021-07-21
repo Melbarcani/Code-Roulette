@@ -14,7 +14,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         registry.addEndpoint("/ws")
                 .setAllowedOrigins(
                         "http://15.236.20.4",
-                        "http://ec2-15-236-20-4.eu-west-3.compute.amazonaws.com/#/home",
+                        "http://ec2-15-236-20-4.eu-west-3.compute.amazonaws.com",
                         "http://34.253.194.75"
                         )
                 .withSockJS();
