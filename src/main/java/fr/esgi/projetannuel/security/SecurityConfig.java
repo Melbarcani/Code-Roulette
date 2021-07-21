@@ -64,7 +64,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
                 .allowedOrigins("*")
                 .allowedMethods("GET", "POST", "PUT", "DELETE")
                 .allowedHeaders("*")
-                .exposedHeaders("Authorization")
-                .allowCredentials(false).maxAge(3600);
+                .exposedHeaders("Authorization");
     }
 }
