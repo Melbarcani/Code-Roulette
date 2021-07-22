@@ -2,6 +2,7 @@ package fr.esgi.projetannuel.service;
 
 import fr.esgi.projetannuel.exception.ResourceNotFoundException;
 import fr.esgi.projetannuel.model.Chat;
+import fr.esgi.projetannuel.model.Dto.GameDto;
 import fr.esgi.projetannuel.model.Game;
 import fr.esgi.projetannuel.model.User;
 import fr.esgi.projetannuel.model.UserInGame;
@@ -26,6 +27,11 @@ public class GameService {
 
     public List<Game> findAll() {
         return gameRepository.findAll();
+    }
+
+    public GameDto findDtoGameById(String id) {
+        Game game = gameRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Game", id));
+        return game.toDtoGame();
     }
 
     public Game findById(String id) {

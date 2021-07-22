@@ -3,7 +3,6 @@ package fr.esgi.projetannuel.controller;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import fr.esgi.projetannuel.model.Message;
 import fr.esgi.projetannuel.service.ChatService;
-import fr.esgi.projetannuel.service.GameService;
 import fr.esgi.projetannuel.service.MessageService;
 import fr.esgi.projetannuel.service.UserService;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -38,10 +37,16 @@ public class WebSocketController {
         return message;
     }
 
-    @MessageMapping("/socket/updateQueueCounter")
-    @SendTo("/socket/updateQueueCounter")
+    @MessageMapping("/socket/updateQueue")
+    @SendTo("/socket/updateQueue")
     public int updateQueueCounter() {
         return 0;
+    }
+
+    @MessageMapping("/socket/gameCreated/{gameId}")
+    @SendTo("/socket/updateQueue")
+    public String updateQueueGameCreated(@DestinationVariable String gameId) {
+        return gameId;
     }
 
     @MessageMapping("/socket/endTurn/{gameId}")

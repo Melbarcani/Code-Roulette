@@ -1,5 +1,6 @@
 package fr.esgi.projetannuel.model;
 
+import fr.esgi.projetannuel.model.Dto.GameDto;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -149,5 +150,14 @@ public class Game {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public GameDto toDtoGame() {
+        GameDto gameDto = new GameDto();
+
+        gameDto.id = this.id;
+        gameDto.usersInGame = this.usersInGame;
+
+        return gameDto;
     }
 }

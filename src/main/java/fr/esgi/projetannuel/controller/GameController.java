@@ -1,5 +1,6 @@
 package fr.esgi.projetannuel.controller;
 
+import fr.esgi.projetannuel.model.Dto.GameDto;
 import fr.esgi.projetannuel.model.Game;
 import fr.esgi.projetannuel.service.GameService;
 import org.springframework.http.HttpStatus;
@@ -26,6 +27,11 @@ public class GameController {
     @GetMapping("/{id}")
     public ResponseEntity<Game> findById(@PathVariable String id){
         return new ResponseEntity<>(gameService.findById(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/light/{id}")
+    public ResponseEntity<GameDto> findGameDTOById(@PathVariable String id){
+        return new ResponseEntity<>(gameService.findDtoGameById(id), HttpStatus.OK);
     }
 
     @GetMapping("/games/{userId}")
