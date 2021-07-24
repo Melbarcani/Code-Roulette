@@ -13,6 +13,8 @@ public class NewCodeBuilderFactory {
                 return new NewJavaCodeBuilder(newCode);
             case Python:
                 return new NewPythonCodeBuilder(newCode);
+            case C:
+                return new NewCCodeBuilder(newCode);
             default:
                 return null;
         }

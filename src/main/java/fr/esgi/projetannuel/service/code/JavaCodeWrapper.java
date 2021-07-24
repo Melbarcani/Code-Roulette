@@ -18,9 +18,9 @@ public class JavaCodeWrapper {
             "\n" +
             "    }\n";
     public static final String INNER_CLASS = "private static class ChallengeIntern {\n" +
-            "        private final StringBuilder displayableOutput = new StringBuilder();\n" +
+            "        private final StringBuilder result = new StringBuilder();\n" +
             "        public String performTests() {\n";
-    public static final String RETURN_OUTPUT = "\nreturn displayableOutput.toString();\n" +
+    public static final String RETURN_OUTPUT = "\nreturn result.toString();\n" +
             "        }\n";
     public static final String METHOD_MODIFIER_VISIBILITY = "public static\n" +
             "//&&&&&&&\n";

@@ -18,7 +18,6 @@ public class NewJavaCodeBuilder implements NewCodeBuilder{
                 .append(METHOD_MODIFIER_VISIBILITY)
                 .append(newCode.getCode())
                 .append(CLOSE_BUILDING);
-        System.out.println(entireCode);
         return entireCode.toString();
     }
 }
