@@ -1,13 +1,12 @@
-package fr.esgi.projetannuel.service;
-
+package fr.esgi.projetannuel.service.code;
 
 import fr.esgi.projetannuel.model.NewCode;
 import lombok.RequiredArgsConstructor;
 
-import static fr.esgi.projetannuel.model.Constants.*;
+import static fr.esgi.projetannuel.service.code.JavaCodeWrapper.*;
 
 @RequiredArgsConstructor
-public class CodeBuilder {
+public class NewJavaCodeBuilder implements NewCodeBuilder{
     private final NewCode newCode;
 
     public String execute(){
@@ -19,6 +18,7 @@ public class CodeBuilder {
                 .append(METHOD_MODIFIER_VISIBILITY)
                 .append(newCode.getCode())
                 .append(CLOSE_BUILDING);
+        System.out.println(entireCode);
         return entireCode.toString();
     }
 }

@@ -8,6 +8,8 @@ import fr.esgi.projetannuel.model.NewCode;
 import fr.esgi.projetannuel.repository.GameRepository;
 import fr.esgi.projetannuel.repository.UserInGameRepository;
 import fr.esgi.projetannuel.service.*;
+import fr.esgi.projetannuel.service.code.NewCodeBuilder;
+import fr.esgi.projetannuel.service.code.NewCodeBuilderFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -75,10 +77,10 @@ public class CompilationController {
 
     @PostMapping("/compileNewCode")
     public ResponseEntity<NewCode> compileNewCode(@RequestBody NewCode newCode) {
-        CodeBuilder codeBuilder = new CodeBuilder(newCode);
+        NewCodeBuilder newCodeBuilder = NewCodeBuilderFactory.create(newCode);
 
         String userId = sessionService.getCurrentUser().getId();
-        var compilationResult = restService.postCode(codeBuilder.execute(), newCode.getLanguage(), newCode.getTitle(), userId);
+        var compilationResult = restService.postCode(newCodeBuilder.execute(), newCode.getLanguage(), newCode.getTitle(), userId);
         newCode.setStatus(compilationResult.getStatus().toString());
         newCode.setCompilationOutput(compilationResult.getOutputConsole());
         newCode.setCompilationScore(compilationResult.getInstructionsCount());

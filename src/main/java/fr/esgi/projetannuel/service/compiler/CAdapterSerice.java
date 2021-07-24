@@ -1,12 +1,8 @@
 package fr.esgi.projetannuel.service.compiler;
 
 import fr.esgi.projetannuel.model.Exercise;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
-@Service
-@RequiredArgsConstructor
-public class JavaAdapterService extends AbstractCompilerService {
+public class CAdapterSerice extends AbstractCompilerService {
 
     private static final String SPLITTER = "//&&&&&&&";
 

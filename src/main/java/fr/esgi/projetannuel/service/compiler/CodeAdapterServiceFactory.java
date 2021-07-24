@@ -14,6 +14,8 @@ public class CodeAdapterServiceFactory {
                 return new JavaAdapterService();
             case Python:
                 return new PythonAdapterService();
+            case C:
+return new CAdapterSerice();
             default:
                 return null;
         }
