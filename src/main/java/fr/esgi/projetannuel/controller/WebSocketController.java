@@ -29,9 +29,10 @@ public class WebSocketController {
     public Message sendMessage(@RequestBody ObjectNode objectJson) {
         String chatId = objectJson.get("chatId").asText();
         String messageContent = objectJson.get("message").asText();
+        String messageType = objectJson.get("type").asText();
         String userId = objectJson.get("userId").asText();
 
-        Message message = messageService.create(new Message(messageContent, userService.findById(userId)));
+        Message message = messageService.create(new Message(messageContent, messageType, userService.findById(userId)));
         chatService.addMessage(chatService.findById(chatId), message);
 
         return message;

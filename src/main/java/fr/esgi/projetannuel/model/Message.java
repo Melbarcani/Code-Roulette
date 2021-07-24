@@ -20,6 +20,9 @@ public class Message {
     private String text;
 
     @Column(nullable = true)
+    private String type;
+
+    @Column(nullable = true)
     private LocalDateTime createdAt;
 
     @OneToOne
@@ -27,15 +30,17 @@ public class Message {
 
     public Message() {}
 
-    public Message(String text, User user){
+    public Message(String text, String type, User user){
         this.text = text;
+        this.type = type;
         this.user = user;
         this.createdAt = LocalDateTime.now();
     }
 
-    public Message(String id, String text, User user) {
+    public Message(String id, String text, String type, User user) {
         this.id = id;
         this.text = text;
+        this.type = type;
         this.user = user;
         this.createdAt = LocalDateTime.now();
     }
@@ -74,5 +79,13 @@ public class Message {
 
     public String formatMessageToChat() {
         return String.format("%s : %s", this.user.getUserName(), this.text);
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }
