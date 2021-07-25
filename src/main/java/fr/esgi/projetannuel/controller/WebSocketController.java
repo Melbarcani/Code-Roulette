@@ -24,9 +24,9 @@ public class WebSocketController {
         this.messageService = messageService;
     }
 
-    @MessageMapping("/socket/sendMessage")
-    @SendTo("/socket/chat")
-    public Message sendMessage(@RequestBody ObjectNode objectJson) {
+    @MessageMapping("/socket/sendMessage/{gameId}")
+    @SendTo("/socket/chat/{gameId}")
+    public Message sendMessage(@DestinationVariable String gameId, @RequestBody ObjectNode objectJson) {
         String chatId = objectJson.get("chatId").asText();
         String messageContent = objectJson.get("message").asText();
         String messageType = objectJson.get("type").asText();
