@@ -81,11 +81,9 @@ public class CompilationController {
 
     @PostMapping("/compileNewCode")
     public ResponseEntity<NewCode> compileNewCode(@RequestBody NewCode newCode) {
-        NewCodeBuilder newCodeBuilder = NewCodeBuilderFactory.create(newCode);
-        String newEntireCode = newCodeBuilder.execute();
-        System.out.println(newEntireCode);
+        var newCodeBuilder = NewCodeBuilderFactory.create(newCode);
         String userId = sessionService.getCurrentUser().getId();
-        var compilationResult = restService.postCode(newEntireCode, newCode.getLanguage(), newCode.getTitle(), userId);
+        var compilationResult = restService.postCode(newCodeBuilder.execute(), newCode.getLanguage(), newCode.getTitle(), userId);
         newCode.setStatus(compilationResult.getStatus().toString());
         newCode.setCompilationOutput(compilationResult.getOutputConsole());
         newCode.setCompilationScore(compilationResult.getInstructionsCount());
