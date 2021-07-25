@@ -13,7 +13,7 @@ public class PythonCodeWrapper {
             "  \tcounter = 0\n" +
             "  \tbyteCode = dis.Bytecode(challenge)\n" +
             "  \tfor instr in byteCode:\n" +
-            "  \tcounter = counter + 1\n" +
+            "  \t\tcounter = counter + 1\n" +
             "  \tprint(\"&&&lines&&&\",counter, \"&&&count&&&\")\n" +
             "  \tresult+=\"\\n\"\n" +
             "  \tprint()\n" +
