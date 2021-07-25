@@ -52,6 +52,11 @@ public class GameController {
 
     @PostMapping("/endTurn")
     public ResponseEntity<Game> endTurn(@RequestBody Game game){
-        return new ResponseEntity<>(gameService.endTurn(game), HttpStatus.CREATED);
+        return new ResponseEntity<>(gameService.endTurn(game), HttpStatus.OK);
+    }
+
+    @PostMapping("/forfeit")
+    public ResponseEntity<Game> forfeit(@RequestBody Game game){
+        return new ResponseEntity<>(gameService.forfeitGame(game), HttpStatus.OK);
     }
 }

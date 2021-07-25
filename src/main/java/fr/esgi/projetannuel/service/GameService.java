@@ -1,11 +1,8 @@
 package fr.esgi.projetannuel.service;
 
 import fr.esgi.projetannuel.exception.ResourceNotFoundException;
-import fr.esgi.projetannuel.model.Chat;
+import fr.esgi.projetannuel.model.*;
 import fr.esgi.projetannuel.model.Dto.GameDto;
-import fr.esgi.projetannuel.model.Game;
-import fr.esgi.projetannuel.model.User;
-import fr.esgi.projetannuel.model.UserInGame;
 import fr.esgi.projetannuel.repository.ChatRepository;
 import fr.esgi.projetannuel.repository.GameRepository;
 import fr.esgi.projetannuel.repository.UserInGameRepository;
@@ -90,12 +87,15 @@ public class GameService {
 
         game.setUsersInGame(usersInGameSaved);
         game.setChat(chatRepository.save(new Chat()));
+
+        game.getChat().getMessages().add(new Message("If you leave the game when it's ongoing, you will be forfeit of the game and loose elo.", "warning", null));
+
         return gameRepository.save(game);
     }
 
     public Game endTurn(Game game) {
         // get current UserInGame
-         UserInGame lastUserIgPlayed = game.getUsersInGame()
+        UserInGame lastUserIgPlayed = game.getUsersInGame()
                 .stream()
                 .filter(UserInGame::isCurrent)
                 .findFirst().orElseThrow(() -> new ResourceNotFoundException("lastUserIgPlayed - Game's current User not found !", game.getId()));
@@ -157,6 +157,34 @@ public class GameService {
         userInGameRepository.save(nextUserToPlay);
 
         return game;
+    }
+
+    public Game forfeitGame(Game game) {
+        // get User who forfeited the game
+        UserInGame userForfeit = game.getUsersInGame()
+                .stream()
+                .filter(UserInGame::isForfeit)
+                .findFirst().orElseThrow(() -> new ResourceNotFoundException("lastUserIgPlayed - Game's current User not found !", game.getId()));
+
+        // get current UserInGame
+        UserInGame lastUserIgPlayed = game.getUsersInGame()
+                .stream()
+                .filter(UserInGame::isCurrent)
+                .findFirst().orElseThrow(() -> new ResourceNotFoundException("lastUserIgPlayed - Game's current User not found !", game.getId()));
+
+        // set current to false of UserInGame
+        lastUserIgPlayed.setCurrent(false);
+        userInGameRepository.save(lastUserIgPlayed);
+
+        game.setGameOver(true);
+        game.setGameForfeit(true);
+
+        // decrease elo of user who forfeited
+        userForfeit.getUser().decreaseElo(15 * game.getUsersInGame().size());
+        userRepository.save(userForfeit.getUser());
+        userInGameRepository.save(userForfeit);
+
+        return gameRepository.save(game);
     }
 
     @Transactional

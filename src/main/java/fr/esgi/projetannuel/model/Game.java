@@ -28,6 +28,9 @@ public class Game {
     boolean isGameOver = false;
 
     @Column
+    boolean isGameForfeit = false;
+
+    @Column
     int numberOfTurn = 3;
 
     @Column
@@ -159,5 +162,13 @@ public class Game {
         gameDto.usersInGame = this.usersInGame;
 
         return gameDto;
+    }
+
+    public boolean isGameForfeit() {
+        return isGameForfeit;
+    }
+
+    public void setGameForfeit(boolean gameForfeit) {
+        isGameForfeit = gameForfeit;
     }
 }

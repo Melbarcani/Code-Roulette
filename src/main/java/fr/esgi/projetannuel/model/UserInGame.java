@@ -27,6 +27,9 @@ public class UserInGame {
     @Column
     private boolean won = false;
 
+    @Column
+    private boolean isForfeit = false;
+
     @OneToOne
     private User user;
 
@@ -87,5 +90,13 @@ public class UserInGame {
 
     public void setWon(boolean won) {
         this.won = won;
+    }
+
+    public boolean isForfeit() {
+        return isForfeit;
+    }
+
+    public void setForfeit(boolean forfeit) {
+        isForfeit = forfeit;
     }
 }
