@@ -1,5 +1,6 @@
 package fr.esgi.projetannuel.controller;
 
+import fr.esgi.projetannuel.enumeration.Language;
 import fr.esgi.projetannuel.model.Exercise;
 import fr.esgi.projetannuel.model.NewCode;
 import fr.esgi.projetannuel.service.code.NewCodeBuilder;
@@ -52,6 +53,22 @@ public class ExerciseController
     @GetMapping("/random")
     public ResponseEntity<Exercise> getRandom(){
         List<Exercise> exercises = exerciseService.findAll();
+        Exercise exercise;
+
+        if(exercises.size() == 1) {
+            exercise = exercises.get(0);
+            return new ResponseEntity<>(exercise, HttpStatus.OK);
+        }
+
+        Random rand = new Random();
+        exercise = exercises.get(rand.nextInt(exercises.size() - 1));
+
+        return new ResponseEntity<>(exercise, HttpStatus.OK);
+    }
+
+    @PostMapping("/language/random")
+    public ResponseEntity<Exercise> getRandomExerciseByLanguage(@RequestBody Language language){
+        List<Exercise> exercises = exerciseService.findAllByLanguage(language);
         Exercise exercise;
 
         if(exercises.size() == 1) {

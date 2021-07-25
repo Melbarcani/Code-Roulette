@@ -1,5 +1,6 @@
 package fr.esgi.projetannuel.service;
 
+import fr.esgi.projetannuel.enumeration.Language;
 import fr.esgi.projetannuel.exception.ExerciseNotSplittedException;
 import fr.esgi.projetannuel.exception.ResourceNotFoundException;
 import fr.esgi.projetannuel.model.Constants;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -43,5 +45,12 @@ public class ExerciseService {
     @Transactional
     public void deleteById(String id) {
         repository.deleteById(id);
+    }
+
+    public List<Exercise> findAllByLanguage(Language language) {
+        return repository
+                .findAll()
+                .stream().filter(exercise -> exercise.getLanguage().equals(language))
+                .collect(Collectors.toList());
     }
 }
