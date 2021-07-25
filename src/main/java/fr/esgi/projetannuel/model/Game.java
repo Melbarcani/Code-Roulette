@@ -1,6 +1,7 @@
 package fr.esgi.projetannuel.model;
 
 import fr.esgi.projetannuel.model.Dto.GameDto;
+import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -47,6 +48,9 @@ public class Game {
 
     @Column(nullable = true)
     private LocalDateTime createdAt = LocalDateTime.now();
+
+    @Transient
+    private long lastScore;
 
     // @JsonIgnore
     @ElementCollection
@@ -150,6 +154,14 @@ public class Game {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public long getLastScore() {
+        return lastScore;
+    }
+
+    public void setLastScore(long lastScore) {
+        this.lastScore = lastScore;
     }
 
     public GameDto toDtoGame() {
