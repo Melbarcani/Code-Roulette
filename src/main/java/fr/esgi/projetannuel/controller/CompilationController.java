@@ -49,6 +49,11 @@ public class CompilationController {
 
     @PostMapping("/compileAndSave/{timer}")
     public ResponseEntity<Compilation> compileAndSave(@PathVariable Long timer, @RequestBody Game game) {
+        int index = game.getCompilations().size() - 1;
+        long lastScore = 0;
+        if(index > -1){
+            lastScore = game.getCompilations().get(index).getScore();
+        }
         Exercise userExercise = game.getExercise();
         String userId = sessionService.getCurrentUser().getId();
         String entireUserCode = compilationService.buildCodeToCompile(userExercise);
@@ -57,7 +62,7 @@ public class CompilationController {
         long score = 0;
 
         if(compilationResult.getStatus().equals(Status.SUCCESS)){
-            score = scoreService.computeScore(userExercise, compilationResult.getInstructionsCount(), (game.getTimer() - timer));
+            score = scoreService.computeScore(userExercise, compilationResult.getInstructionsCount(), (game.getTimer() - timer), lastScore);
         }
 
         Compilation compilation = new Compilation(
@@ -81,11 +86,9 @@ public class CompilationController {
 
     @PostMapping("/compileNewCode")
     public ResponseEntity<NewCode> compileNewCode(@RequestBody NewCode newCode) {
-        NewCodeBuilder newCodeBuilder = NewCodeBuilderFactory.create(newCode);
-        String newEntireCode = newCodeBuilder.execute();
-        System.out.println(newEntireCode);
+        var newCodeBuilder = NewCodeBuilderFactory.create(newCode);
         String userId = sessionService.getCurrentUser().getId();
-        var compilationResult = restService.postCode(newEntireCode, newCode.getLanguage(), newCode.getTitle(), userId);
+        var compilationResult = restService.postCode(newCodeBuilder.execute(), newCode.getLanguage(), newCode.getTitle(), userId);
         newCode.setStatus(compilationResult.getStatus().toString());
         newCode.setCompilationOutput(compilationResult.getOutputConsole());
         newCode.setCompilationScore(compilationResult.getInstructionsCount());
@@ -97,7 +100,7 @@ public class CompilationController {
         String userId = sessionService.getCurrentUser().getId();
         String entireUserCode = compilationService.buildCodeToCompile(userExercise);
         var compilationResult = restService.postCode(entireUserCode, userExercise.getLanguage(), userExercise.getTitle(), userId);
-        long score = scoreService.computeScore(userExercise, compilationResult.getInstructionsCount(), 1);
+        long score = scoreService.computeScore(userExercise, compilationResult.getInstructionsCount(), 1,0);
 
         Compilation compilation = new Compilation(
                 entireUserCode,

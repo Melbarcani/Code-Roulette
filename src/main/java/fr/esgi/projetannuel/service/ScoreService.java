@@ -10,8 +10,8 @@ public class ScoreService {
 
     private final ExerciseService exerciseService;
 
-    public long computeScore(Exercise exercise, long instructionsCount, long spentTime) {
+    public long computeScore(Exercise exercise, long instructionsCount, long spentTime, long lastScore) {
         long initialInstructionsCount = exerciseService.getExercise(exercise.getId()).getInitialInstructionsCount();
-        return (initialInstructionsCount - instructionsCount) * spentTime /2 ;
+        return ((initialInstructionsCount - instructionsCount) - lastScore) * spentTime /2 ;
     }
 }
