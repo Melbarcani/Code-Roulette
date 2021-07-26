@@ -1,8 +1,9 @@
 package fr.esgi.projetannuel.model;
 
 import fr.esgi.projetannuel.enumeration.Language;
-import fr.esgi.projetannuel.enumeration.Status;
 import lombok.Data;
+
+import java.util.List;
 
 @Data
 public class NewCode {
@@ -14,5 +15,5 @@ public class NewCode {
     private String compilationOutput;
     private long compilationScore;
     private String status;
-
+    List<String> codeViolationList;
 }
