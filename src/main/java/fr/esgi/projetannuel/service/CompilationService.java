@@ -2,6 +2,7 @@ package fr.esgi.projetannuel.service;
 
 import fr.esgi.projetannuel.enumeration.Status;
 import fr.esgi.projetannuel.exception.ResourceNotFoundException;
+import fr.esgi.projetannuel.model.CodeResult;
 import fr.esgi.projetannuel.model.Compilation;
 import fr.esgi.projetannuel.model.Exercise;
 import fr.esgi.projetannuel.repository.CompilationRepository;
@@ -20,6 +21,7 @@ public class CompilationService {
     private final CompilationRepository compilationRepository;
     private final ExerciseService exerciseService;
     private final UserService userService;
+    private final SessionService sessionService;
 
     public List<Compilation> findAll() {
         return compilationRepository.findAll();
@@ -61,5 +63,20 @@ public class CompilationService {
         var codeAdapter = CodeAdapterServiceFactory.create(userExercise.getLanguage());
         var mainExercise = exerciseService.getExercise(userExercise.getId());
         return codeAdapter.mergeCode(userExercise, mainExercise);
+    }
+
+    public Compilation createCompilationDto(CodeResult compilationResult, String entireUserCode, Exercise userExercise, long score) {
+        var compilation = new Compilation(
+                entireUserCode,
+                compilationResult.getOutputConsole(),
+                compilationResult.getStatus(),
+                sessionService.getCurrentUser(),
+                userExercise,
+                score,
+                compilationResult.getInstructionsCount()
+        );
+
+        createFullCompilation(compilation);
+        return compilation;
     }
 }

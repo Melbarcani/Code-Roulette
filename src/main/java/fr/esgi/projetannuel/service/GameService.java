@@ -1,5 +1,6 @@
 package fr.esgi.projetannuel.service;
 
+import fr.esgi.projetannuel.enumeration.Status;
 import fr.esgi.projetannuel.exception.ResourceNotFoundException;
 import fr.esgi.projetannuel.model.*;
 import fr.esgi.projetannuel.model.Dto.GameDto;
@@ -199,5 +200,13 @@ public class GameService {
             }
         }
         return null;
+    }
+
+    public void saveGameAfterCompilation(Exercise userExercise, Game game, CodeResult compilationResult, Compilation compilation) {
+        if (compilationResult.getStatus().equals(Status.SUCCESS)) {
+            game.setCode(userExercise.getCode());
+        }
+        game.getCompilations().add(compilation);
+        gameRepository.save(game);
     }
 }

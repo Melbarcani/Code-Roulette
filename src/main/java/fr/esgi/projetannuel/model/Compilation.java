@@ -1,6 +1,7 @@
 package fr.esgi.projetannuel.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import fr.esgi.projetannuel.enumeration.Status;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -18,10 +19,10 @@ public class Compilation {
     @Column(updatable = false, nullable = false)
     private String id;
 
-    @Column(columnDefinition="text", nullable = false)
+    @Column(columnDefinition = "text", nullable = false)
     private String input;
 
-    @Column(columnDefinition="text", nullable = true)
+    @Column(columnDefinition = "text", nullable = true)
     private String output;
 
     @OneToOne()
@@ -49,6 +50,10 @@ public class Compilation {
     @Column(nullable = true)
     private long score;
 
+    @Column(nullable = true)
+    private long instructionsCount;
+
+
     public Compilation() {
         this.createdAt = LocalDateTime.now();
     }
@@ -67,13 +72,14 @@ public class Compilation {
         this.compiledAt = LocalDateTime.now();
     }
 
-    public Compilation(String input, String output, Status status, User user, Exercise exercise, long score) {
+    public Compilation(String input, String output, Status status, User user, Exercise exercise, long score, long instructionsCount) {
         this.input = input;
         this.output = output;
         this.status = status;
         this.user = user;
         this.exercise = exercise;
         this.score = score;
+        this.instructionsCount = instructionsCount;
 
         this.createdAt = LocalDateTime.now();
         this.compiledAt = LocalDateTime.now();
@@ -149,6 +155,14 @@ public class Compilation {
 
     public void setExercise(Exercise exercise) {
         this.exercise = exercise;
+    }
+
+    public long getInstructionsCount() {
+        return instructionsCount;
+    }
+
+    public void setInstructionsCount(long instructionsCount) {
+        this.instructionsCount = instructionsCount;
     }
 
     public long getScore() {
