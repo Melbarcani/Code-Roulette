@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -90,8 +91,9 @@ public class CompilationController {
         String userId = sessionService.getCurrentUser().getId();
         var compilationResult = restService.postCode(newCodeBuilder.execute(), newCode.getLanguage(), newCode.getTitle(), userId);
         newCode.setStatus(compilationResult.getStatus().toString());
-        newCode.setCompilationOutput(compilationResult.getOutputConsole());
+        newCode.setCompilationOutput(compilationResult.getOutputConsole() + "\n" + String.join("\n",compilationResult.getRulesViolationList()));
         newCode.setCompilationScore(compilationResult.getInstructionsCount());
+        newCode.setCodeViolationList(compilationResult.getRulesViolationList());
         return new ResponseEntity<>(newCode, HttpStatus.OK);
     }
 
