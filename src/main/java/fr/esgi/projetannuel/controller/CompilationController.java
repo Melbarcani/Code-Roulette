@@ -2,11 +2,8 @@ package fr.esgi.projetannuel.controller;
 
 import fr.esgi.projetannuel.enumeration.Status;
 import fr.esgi.projetannuel.model.Compilation;
-import fr.esgi.projetannuel.model.Exercise;
 import fr.esgi.projetannuel.model.Game;
 import fr.esgi.projetannuel.model.NewCode;
-import fr.esgi.projetannuel.repository.GameRepository;
-import fr.esgi.projetannuel.repository.UserInGameRepository;
 import fr.esgi.projetannuel.service.*;
 import fr.esgi.projetannuel.service.code.NewCodeBuilderFactory;
 import lombok.RequiredArgsConstructor;
@@ -22,13 +19,9 @@ import java.util.List;
 public class CompilationController {
     private final CompilationService compilationService;
     private final GameService gameService;
-    private final GameRepository gameRepository;
     private final RestService restService;
-    private final ExerciseService exerciseService;
     private final SessionService sessionService;
     private final ScoreService scoreService;
-    private final UserInGameService userInGameService;
-    private final UserInGameRepository userInGameRepository;
 
 
     @GetMapping
@@ -78,8 +71,8 @@ public class CompilationController {
         return new ResponseEntity<>(newCode, HttpStatus.OK);
     }
 
-    @PostMapping("/compileAndSaveExercise")//Check if this call exists in the front
-    public ResponseEntity<Compilation> compileAndSave(@RequestBody Exercise userExercise/*, long spentTime*/) {
+    /*@PostMapping("/compileAndSaveExercise")//Check if this call exists in the front
+    public ResponseEntity<Compilation> compileAndSave(@RequestBody Exercise userExercise*//*, long spentTime*//*) {
         String userId = sessionService.getCurrentUser().getId();
         String entireUserCode = compilationService.buildCodeToCompile(userExercise);
         var compilationResult = restService.postCode(entireUserCode, userExercise.getLanguage(), userExercise.getTitle(), userId);
@@ -98,7 +91,7 @@ public class CompilationController {
         compilationService.createFullCompilation(compilation);
 
         return new ResponseEntity<>(compilation, HttpStatus.OK);
-    }
+    }*/
 
     /*@PostMapping("/compile")
     public ResponseEntity<Compilation> saveCompiledCode(@RequestBody String input){

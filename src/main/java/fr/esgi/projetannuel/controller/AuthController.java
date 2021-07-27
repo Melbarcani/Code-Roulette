@@ -3,8 +3,6 @@ package fr.esgi.projetannuel.controller;
 import fr.esgi.projetannuel.model.Login;
 import fr.esgi.projetannuel.model.User;
 import fr.esgi.projetannuel.service.AuthService;
-import fr.esgi.projetannuel.service.SessionService;
-import fr.esgi.projetannuel.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

@@ -29,7 +29,7 @@ public abstract class AbstractCompilerService {
             parts = content.split(splitter);
         }
         if (parts.length > 0) {
-            return parts[1];
+            return parts[1].replaceAll("(?m)^[ \t]*\r?\n", "");
         }
         throw new ResourceNotFoundException("exo", exoId);
     }

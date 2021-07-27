@@ -36,11 +36,6 @@ public class CompilationService {
         return compilationRepository.save(code);
     }
 
-    public Compilation createFullCompilation(Compilation compilation) {
-        userService.updateCompilationCompleted();
-        return compilationRepository.save(compilation);
-    }
-
     public Compilation createWithOutput(String input, String output, Status status) {
         var code = new Compilation(input, output, status);
         return compilationRepository.save(code);
@@ -76,7 +71,11 @@ public class CompilationService {
                 compilationResult.getInstructionsCount()
         );
 
-        createFullCompilation(compilation);
-        return compilation;
+        return createFullCompilation(compilation);
+    }
+
+    private Compilation createFullCompilation(Compilation compilation) {
+        userService.updateCompilationCompleted();
+        return compilationRepository.save(compilation);
     }
 }

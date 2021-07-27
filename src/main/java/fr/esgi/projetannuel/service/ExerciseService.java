@@ -30,7 +30,8 @@ public class ExerciseService {
 
     public Exercise getExerciseToDisplay(String id) { //codeService pour split
         var exercise = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(Constants.EXERCISE, id));
-        AbstractCompilerService compilerService = CodeAdapterServiceFactory.create(exercise.getLanguage());
+        var compilerService = CodeAdapterServiceFactory.create(exercise.getLanguage());
+
         String codeToDisplay = compilerService.createExerciseToDisplay(exercise.getId(), exercise.getCode());
         if(codeToDisplay == null || codeToDisplay.isBlank()){
             throw new ExerciseNotSplittedException(Constants.EXERCISE, id);

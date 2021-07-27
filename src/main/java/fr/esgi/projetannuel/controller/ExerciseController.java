@@ -3,7 +3,6 @@ package fr.esgi.projetannuel.controller;
 import fr.esgi.projetannuel.enumeration.Language;
 import fr.esgi.projetannuel.model.Exercise;
 import fr.esgi.projetannuel.model.NewCode;
-import fr.esgi.projetannuel.service.code.NewCodeBuilder;
 import fr.esgi.projetannuel.service.ExerciseService;
 import fr.esgi.projetannuel.service.code.NewCodeBuilderFactory;
 import lombok.RequiredArgsConstructor;
@@ -38,7 +37,7 @@ public class ExerciseController
 
     @PostMapping("/save")
     public ResponseEntity<NewCode> save(@RequestBody NewCode newCode){
-        NewCodeBuilder codeBuilder = NewCodeBuilderFactory.create(newCode);
+        var codeBuilder = NewCodeBuilderFactory.create(newCode);
         var exercise = new Exercise(newCode.getTitle(), codeBuilder.execute(), newCode.getDescription(), newCode.getLanguage());
         exerciseService.create(exercise);
         return new ResponseEntity<>(newCode, HttpStatus.CREATED);
@@ -53,6 +52,10 @@ public class ExerciseController
     @GetMapping("/random")
     public ResponseEntity<Exercise> getRandom(){
         List<Exercise> exercises = exerciseService.findAll();
+        return getExerciseResponseEntity(exercises);
+    }
+
+    private ResponseEntity<Exercise> getExerciseResponseEntity(List<Exercise> exercises) {
         Exercise exercise;
 
         if(exercises.size() == 1) {
@@ -60,7 +63,7 @@ public class ExerciseController
             return new ResponseEntity<>(exercise, HttpStatus.OK);
         }
 
-        Random rand = new Random();
+        var rand = new Random();
         exercise = exercises.get(rand.nextInt(exercises.size() - 1));
 
         return new ResponseEntity<>(exercise, HttpStatus.OK);
@@ -69,16 +72,6 @@ public class ExerciseController
     @PostMapping("/language/random")
     public ResponseEntity<Exercise> getRandomExerciseByLanguage(@RequestBody Language language){
         List<Exercise> exercises = exerciseService.findAllByLanguage(language);
-        Exercise exercise;
-
-        if(exercises.size() == 1) {
-            exercise = exercises.get(0);
-            return new ResponseEntity<>(exercise, HttpStatus.OK);
-        }
-
-        Random rand = new Random();
-        exercise = exercises.get(rand.nextInt(exercises.size() - 1));
-
-        return new ResponseEntity<>(exercise, HttpStatus.OK);
+        return getExerciseResponseEntity(exercises);
     }
 }
