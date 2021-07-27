@@ -38,7 +38,7 @@ public class ExerciseController
     @PostMapping("/save")
     public ResponseEntity<NewCode> save(@RequestBody NewCode newCode){
         var codeBuilder = NewCodeBuilderFactory.create(newCode);
-        var exercise = new Exercise(newCode.getTitle(), codeBuilder.execute(), newCode.getDescription(), newCode.getLanguage());
+        var exercise = new Exercise(newCode.getTitle(), codeBuilder.execute(), newCode.getDescription(), newCode.getLanguage(), newCode.getCompilationScore());
         exerciseService.create(exercise);
         return new ResponseEntity<>(newCode, HttpStatus.CREATED);
     }

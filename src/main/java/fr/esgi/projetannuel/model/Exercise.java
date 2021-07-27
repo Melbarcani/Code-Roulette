@@ -23,7 +23,7 @@ public class Exercise {
     @Column
     private String description;
 
-    @Column(columnDefinition="text", nullable = false)
+    @Column(columnDefinition = "text", nullable = false)
     private String code;
 
     @Column(nullable = false)
@@ -61,12 +61,12 @@ public class Exercise {
         this.createdAt = LocalDateTime.now();
     }
 
-    public Exercise(String title, String code, String description, Language language) {
-        this.id = id;
+    public Exercise(String title, String code, String description, Language language, long initialInstructionsCount) {
         this.title = title;
         this.code = code;
         this.description = description;
         this.language = language;
+        this.initialInstructionsCount = initialInstructionsCount;
 
         this.createdAt = LocalDateTime.now();
     }
