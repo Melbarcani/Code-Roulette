@@ -20,7 +20,7 @@ public class ScoreService {
         if (lastCompilation > -1) {
             lastInstructions = game.getCompilations().get(lastCompilation).getInstructionsCount();
         }
-        long score = (lastInstructions - instructionsCount) - (game.getTimer() - timer) * 2;
+        long score = (lastInstructions - instructionsCount) * 3 / (game.getTimer() - timer) == 0 ? 1 :  (game.getTimer() - timer);
         return instructionsCount == lastInstructions || score < 0
                 ? 0
                 : score;
